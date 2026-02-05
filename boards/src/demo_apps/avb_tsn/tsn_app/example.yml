@@ -1,0 +1,47 @@
+tsn_app:
+  section-type: application
+  contents:
+    meta_path: examples/demo_apps/avb_tsn/tsn_app
+    project-root-path: boards/${board}/demo_apps/avb_tsn/tsn_app/${multicore_foldername}
+    document:
+      name: tsn_app${core_id_suffix_name}
+      category: demo_apps
+      brief: tsn_app
+  boards:
+    evkmimxrt1180@cm33:
+    - +armgcc@release
+    - +armgcc@debug
+    - +armgcc@ram_release
+    - +armgcc@ram_debug
+    - +armgcc@hyperram_release
+    - +armgcc@hyperram_debug
+    - -armgcc@flexspi_nor_debug
+    - -armgcc@flexspi_nor_release
+    - -armgcc@hyperram_txt_debug
+    - -armgcc@hyperram_txt_release
+    evkmimxrt1180@cm7:
+    - +armgcc@release
+    - +armgcc@debug
+    - +armgcc@ram_release
+    - +armgcc@ram_debug
+    - -armgcc@hyperram_release
+    - -armgcc@hyperram_debug
+    - -armgcc@flexspi_nor_debug
+    - -armgcc@flexspi_nor_release
+    evkbmimxrt1170@cm7:
+    - +armgcc@release
+    - +armgcc@debug
+    - +armgcc@ram_release
+    - +armgcc@ram_debug
+    - -armgcc@sdram_release
+    - -armgcc@flexspi_nor_debug
+    - -armgcc@flexspi_nor_release
+    - -armgcc@sdram_debug
+    frdmmcxe31b:
+    - +armgcc@release
+    - +armgcc@debug
+    frdmmcxe247:
+    - +armgcc@release
+    - +armgcc@debug
+    frdmimxrt1186@cm33: []
+    frdmimxrt1186@cm7: []

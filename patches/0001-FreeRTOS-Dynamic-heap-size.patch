@@ -1,0 +1,28 @@
+From ff8c7514f4a09079f22b60eba735e435edaa4c01 Mon Sep 17 00:00:00 2001
+From: Rui Sousa <rui.sousa@nxp.com>
+Date: Thu, 27 Jun 2019 16:42:28 +0200
+Subject: [PATCH] FreeRTOS: Dynamic heap size
+
+Make the heap size dynamic (use all free DTCM).
+
+Signed-off-by: Seb Laveze <sebastien.laveze@nxp.com>
+---
+ portable/MemMang/heap_4.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/portable/MemMang/heap_4.c b/portable/MemMang/heap_4.c
+index a76fd0f37..9bf31ba7f 100644
+--- a/portable/MemMang/heap_4.c
++++ b/portable/MemMang/heap_4.c
+@@ -90,7 +90,7 @@
+ 
+ /* The application writer has already defined the array used for the RTOS
+ * heap - probably so it can be placed in a special segment or address. */
+-    extern uint8_t ucHeap[ configTOTAL_HEAP_SIZE ];
++    extern uint8_t ucHeap[ /*configTOTAL_HEAP_SIZE*/ ];
+ #else
+     PRIVILEGED_DATA static uint8_t ucHeap[ configTOTAL_HEAP_SIZE ];
+ #endif /* configAPPLICATION_ALLOCATED_HEAP */
+-- 
+2.34.1
+

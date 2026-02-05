@@ -1,0 +1,10 @@
+config MCUX_PRJSEG_module.board.evkbimxrt1050
+    bool
+    default y
+    select MCUX_COMPONENT_component.igpio_adapter
+    select MCUX_COMPONENT_component.phyksz8081
+    select MCUX_COMPONENT_component.rtos_apps.async
+    select MCUX_COMPONENT_driver.flexspi
+    select MCUX_COMPONENT_driver.enet
+    select MCUX_COMPONENT_driver.snvs_hp
+    select MCUX_COMPONENT_driver.semc

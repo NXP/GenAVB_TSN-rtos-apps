@@ -1,0 +1,64 @@
+From e004f2fa76d6e8fa1301e679add76721279c6154 Mon Sep 17 00:00:00 2001
+From: Tobias Aguiar <tobias.aguiarsilvadealmeida@nxp.com>
+Date: Fri, 21 Nov 2025 15:29:36 +0100
+Subject: [PATCH] netc: Optimize endpoint transmit path
+
+Cache Interrupt enabled flag on Tx BD ring structure, instead of
+accessing SI register directly.
+
+Signed-off-by: Tobias Aguiar <tobias.aguiarsilvadealmeida@nxp.com>
+---
+ drivers/netc/fsl_netc.h          | 1 +
+ drivers/netc/fsl_netc_endpoint.c | 4 ++--
+ drivers/netc/fsl_netc_switch.c   | 1 +
+ 3 files changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/netc/fsl_netc.h b/drivers/netc/fsl_netc.h
+index 8e9b3ed7..442495b4 100644
+--- a/drivers/netc/fsl_netc.h
++++ b/drivers/netc/fsl_netc.h
+@@ -3753,6 +3753,7 @@ typedef struct _netc_tx_bdr
+     uint16_t producerIndex;          /*!< Current index for transmit. */
+     uint16_t cleanIndex;             /*!< Current index for tx cleaning. */
+     uint32_t len;                    /*!< Length of this BD ring. */
++    uint8_t enableInterrupt;         /*!< Interrupt enable flag for this BD ring. */
+ } netc_tx_bdr_t;
+ 
+ /*! @brief Status/Interrupts flags for the TX BDR. Each flag get its own bit thus it support bit AND/OR operation. */
+diff --git a/drivers/netc/fsl_netc_endpoint.c b/drivers/netc/fsl_netc_endpoint.c
+index e7ba1776..66b13ea8 100644
+--- a/drivers/netc/fsl_netc_endpoint.c
++++ b/drivers/netc/fsl_netc_endpoint.c
+@@ -209,6 +209,7 @@ static status_t EP_DescriptorInit(ep_handle_t *handle, const ep_config_t *config
+         handle->txBdRing[ring].bdBase    = bdrConfig->txBdrConfig[ring].bdArray;
+         handle->txBdRing[ring].dirtyBase = bdrConfig->txBdrConfig[ring].dirtyArray;
+         handle->txBdRing[ring].len       = bdrConfig->txBdrConfig[ring].len;
++        handle->txBdRing[ring].enableInterrupt = bdrConfig->txBdrConfig[ring].enIntr;
+     }
+     for (ring = 0; ring < config->siConfig.rxRingUse; ring++)
+     {
+@@ -864,8 +865,7 @@ status_t EP_SendFrameCommon(ep_handle_t *handle,
+                 txDesTemp->standard.frameLen = frameLen;
+ #endif
+                 txDesTemp->standard.isExtended = (uint32_t)isExtEnable;
+-                txDesTemp->standard.enableInterrupt =
+-                    (uint32_t)((handle->hw.si->BDR[hwRing].TBIER & ENETC_SI_TBIER_TXFIE_MASK) != 0U);
++                txDesTemp->standard.enableInterrupt = txBdRing->enableInterrupt;
+ 
+                 if (isExtEnable)
+                 {
+diff --git a/drivers/netc/fsl_netc_switch.c b/drivers/netc/fsl_netc_switch.c
+index e3ae3ec7..a6907932 100644
+--- a/drivers/netc/fsl_netc_switch.c
++++ b/drivers/netc/fsl_netc_switch.c
+@@ -697,6 +697,7 @@ status_t SWT_ManagementTxRxConfig(swt_handle_t *handle, ep_handle_t *epHandle, c
+         handle->mgmtTxBdRing.bdBase    = txRxConfig->mgmtTxBdrConfig.bdArray;
+         handle->mgmtTxBdRing.dirtyBase = txRxConfig->mgmtTxBdrConfig.dirtyArray;
+         handle->mgmtTxBdRing.len       = txRxConfig->mgmtTxBdrConfig.len;
++        handle->mgmtTxBdRing.enableInterrupt = txRxConfig->mgmtTxBdrConfig.enIntr;
+     }
+ 
+     return kStatus_Success;
+-- 
+2.34.1
+

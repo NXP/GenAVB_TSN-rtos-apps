@@ -1,0 +1,85 @@
+/*
+** ###################################################################
+**     Processors:          MIMXRT1189CVM8B_cm7
+**                          MIMXRT1189XVM8B_cm7
+**
+**     Compiler:            IAR ANSI C/C++ Compiler for ARM
+**     Reference manual:    IMXRT1180RM, Rev 2, 12/2022
+**     Version:             rev. 0.1, 2021-03-09
+**     Build:               b240109
+**
+**     Abstract:
+**         Linker file for the IAR ANSI C/C++ Compiler for ARM
+**
+**     Copyright 2016 Freescale Semiconductor, Inc.
+**     Copyright 2016-2025 NXP
+**     SPDX-License-Identifier: BSD-3-Clause
+**
+**     http:                 www.nxp.com
+**     mail:                 support@nxp.com
+**
+** ###################################################################
+*/
+
+/* Board memory map */
+define symbol m_itcm_start             = 0x00000000;
+define symbol m_itcm_size              = 0x00040000;
+
+define symbol m_dtcm_start             = 0x20000000;
+define symbol m_dtcm_size              = 0x00040000;
+
+define symbol m_ocram2_nc_start  = 0x20500000;
+define symbol m_ocram2_nc_size   = 0x00002000;
+define symbol m_ocram2_start     = m_ocram2_nc_start + m_ocram2_nc_size;
+define symbol m_ocram2_size      = 0x00040000 - m_ocram2_nc_size;
+define symbol app_image_offset   = 0x0000B000;
+
+/* General definition */
+define symbol vector_table_size        = 0x00000400;
+if (isdefinedsymbol(__stack_size__)) {
+  define symbol __size_cstack__        = __stack_size__;
+} else {
+  define symbol __size_cstack__        = 0x0400;
+}
+
+if (isdefinedsymbol(__heap_size__)) {
+  define symbol __size_heap__          = __heap_size__;
+} else {
+  define symbol __size_heap__          = 0x1000;
+}
+
+
+/* Exported symbol definition */
+define exported symbol __VECTOR_TABLE          = m_itcm_start;
+define exported symbol __VECTOR_RAM            = m_itcm_start;
+define exported symbol __RAM_VECTOR_TABLE_SIZE = vector_table_size;
+
+/* Region definition */
+define memory mem with size = 4G;
+define region m_itcm   = mem:[from m_itcm_start size m_itcm_size];
+define region m_dtcm   = mem:[from m_dtcm_start size m_dtcm_size];
+define region m_ocram2_nc = mem:[from m_ocram2_nc_start size m_ocram2_size];
+define region m_ocram2 = mem:[from m_ocram2_start size m_ocram2_size];
+
+/* Block definition */
+define block interrupts { section .intvec };
+define block RO         { readonly };
+define block RW            { readwrite };
+define block ZI            { zi };
+define block ncache    { section NonCacheable };
+define block ncache_init    { section NonCacheable.init };
+define block QACCESS_CODE  { section CodeQuickAccess };
+define block CSTACK    with alignment = 8, size = __size_cstack__   { };
+define block HEAP      with alignment = 8, size = __size_heap__     { };
+define block UCHEAP      with alignment = 8, minimum size = 32K, expanding size { };
+
+place at start of m_itcm        { block interrupts };
+place in m_itcm                 { block RO };
+place in m_itcm                 { block QACCESS_CODE };
+place at start of m_dtcm        { block RW };
+place at start of m_ocram2_nc   { block ncache_init };
+place in m_ocram2_nc            { block ncache };
+place in m_dtcm                 { block ZI };
+place in m_dtcm                 { block HEAP }; 
+place in m_dtcm                 { block UCHEAP };
+place at end of m_dtcm          { block CSTACK };

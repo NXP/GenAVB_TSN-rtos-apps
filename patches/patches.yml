@@ -1,0 +1,29 @@
+patches:
+- path: 0001-netc-Optimize-endpoint-transmit-path.patch
+  sha256sum: e1b57d64a32aead042e67c215449dc890e9b2cf6f85cddc3841afabe40bfd912
+  module: mcuxsdk
+  author: Tobias Aguiar
+  email: tobias.aguiarsilvadealmeida@nxp.com
+  date: '2025-11-21'
+  apply-command: git am
+- path: 0001-Runtime-debug-console-output-control.patch
+  sha256sum: 0be56f1e6f3c1ca4ec9ea288ada0b0ca51aa1a0256df230ca3200e13ab60a181
+  module: mcuxsdk/components
+  author: Rui Sousa
+  email: rui.sousa@nxp.com
+  date: '2020-01-28'
+  apply-command: git am
+- path: 0002-Use-Insert-key-to-enable-shell-and-remov.patch
+  sha256sum: f04addafbe3381038342397ae186ec5b157401c26c9656c1d89f06647e998419
+  module: mcuxsdk/components
+  author: Rui Sousa
+  email: rui.sousa@nxp.com
+  date: '2020-01-28'
+  apply-command: git am
+- path: 0001-FreeRTOS-Dynamic-heap-size.patch
+  sha256sum: 7afb6e9f76db7b0738e06109b4a81ea93dce15884b9a5f11a40aaee81f16ba3b
+  module: mcuxsdk/rtos/freertos/freertos-kernel
+  author: Rui Sousa
+  email: rui.sousa@nxp.com
+  date: '2019-06-27'
+  apply-command: git am
