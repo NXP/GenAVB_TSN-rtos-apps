@@ -1,0 +1,32 @@
+# Copyright 2025 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+choice MCUX_PRJSEG_config.board.build_cfg_sel
+    prompt "MIMXRT1180 EVK CM7 TSN configuration options"
+    default MCUX_PRJSEG_config.board.app_default
+
+    config MCUX_PRJSEG_config.board.app_default
+        bool "TSN application Endpoint default configuration"
+        select APP_TSN_ENDPOINT
+        select APP_USER_BUTTON
+        select MCUX_COMPONENT_driver.xbar_1
+
+    config MCUX_PRJSEG_config.board.app_enetc0
+        bool "TSN application Endpoint enable enetc0 configuration"
+        select APP_TSN_ENDPOINT
+        select APP_USER_BUTTON
+        select MCUX_COMPONENT_driver.xbar_1
+
+endchoice
+
+config MCUX_PRJSEG_config.board.tsn_motor_controller
+    bool "MIMXRT1180 EVK CM7 TSN Motor Controller configuration"
+    default n
+    select APP_MOTOR_CONTROLLER
+
+config MCUX_PRJSEG_config.board.tsn_motor_iodevice
+    bool "MIMXRT1180 EVK CM7 TSN Motor IO-device configuration"
+    default n
+    select APP_MOTOR_IO_DEVICE
+    select APP_LWIP

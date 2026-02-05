@@ -1,0 +1,27 @@
+dsa_switch:
+  section-type: application
+  contents:
+    meta_path: examples/demo_apps/avb_tsn/dsa/dsa_switch
+    project-root-path: boards/${board}/demo_apps/avb_tsn/dsa_switch/${multicore_foldername}
+    document:
+      name: dsa_switch${core_id_suffix_name}
+      category: demo_apps
+      brief: Distributed Switch Architecture ENETC use case
+  boards:
+    evkmimxrt1180@cm33:
+    - +armgcc@release
+    - +armgcc@debug
+    - +armgcc@ram_release
+    - +armgcc@ram_debug
+    - -armgcc@hyperram_release
+    - -armgcc@hyperram_debug
+    - +iar@release
+    - +iar@debug
+    - +iar@ram_release
+    - +iar@ram_debug
+    - -iar@hyperram_release
+    - -iar@hyperram_debug
+    - -mdk@flexspi_nor_hyperram_debug
+    - -mdk@flexspi_nor_hyperram_release
+    - -mdk@hyperram_txt_debug
+    - -mdk@hyperram_txt_release

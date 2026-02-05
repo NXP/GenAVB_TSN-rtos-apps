@@ -1,0 +1,216 @@
+/*
+** ###################################################################
+**     Processors:          MIMXRT1189CVM8B_cm33
+**                          MIMXRT1189XVM8B_cm33
+**
+**     Compiler:            IAR ANSI C/C++ Compiler for ARM
+**     Reference manual:    IMXRT1180RM, Rev 2, 12/2022
+**     Version:             rev. 0.1, 2021-03-09
+**     Build:               b240109
+**
+**     Abstract:
+**         Linker file for the IAR ANSI C/C++ Compiler for ARM
+**
+**     Copyright 2016 Freescale Semiconductor, Inc.
+**     Copyright 2016-2025 NXP
+**     SPDX-License-Identifier: BSD-3-Clause
+**
+**     http:                 www.nxp.com
+**     mail:                 support@nxp.com
+**
+** ###################################################################
+*/
+
+/* Board memory map */
+
+define symbol m_code_tcm_start   = 0x0FFE0000;
+define symbol m_code_tcm_size    = 0x00020000;
+define symbol m_system_tcm_start = 0x20000000;
+define symbol m_system_tcm_size  = 0x00020000;
+define symbol m_ocram1_ro        = 0xC000;
+define symbol m_ocram1_nc_start  = 0x20480000 + m_ocram1_ro;
+define symbol m_ocram1_nc_size   = 0x00008000;
+define symbol m_ocram1_start     = m_ocram1_nc_start + m_ocram1_nc_size;
+define symbol m_ocram1_size      = 0x00080000 - m_ocram1_nc_size - m_ocram1_ro;
+define symbol m_flash_start      = 0x28000000;
+define symbol m_flash_size       = 0x01000000;
+
+if (isdefinedsymbol(__heap_size__)) {
+    define symbol HEAP_SIZE = __heap_size__;
+} else {
+    define symbol HEAP_SIZE = 0x1000;
+}
+
+if (isdefinedsymbol(__stack_size__)) {
+    define symbol STACK_SIZE = __stack_size__;
+} else {
+    define symbol STACK_SIZE = 0x1000;
+}
+
+/* Specify the memory areas */
+define memory mem with size = 4G;
+define region m_code_tcm   = mem:[from m_code_tcm_start size m_code_tcm_size];
+define region m_system_tcm   = mem:[from m_system_tcm_start size m_system_tcm_size];
+define region m_ocram1_nc = mem:[from m_ocram1_nc_start size m_ocram1_nc_size];
+define region m_ocram1 = mem:[from m_ocram1_start size m_ocram1_size];
+
+/* Block definition */
+define block interrupts with alignment = 4 { section .text object startup_MIMXRT1189_cm33.o };
+
+define block _text_CodeQuickAccess with fixed order, alignment = 4 {section CodeQuickAccess};
+define block _text_freertos_kernel with alignment = 4
+{
+    section .text object croutine.o,
+    section .text object event_groups.o,
+    section .text object list.o,
+    section .text object queue.o,
+    section .text object stream_buffer.o,
+    section .text object tasks.o,
+    section .text object timers.o,
+    section .text object heap_4.o,
+    section .text object port.o,
+    section .text object port_asm.o,
+    section .text object mpu_wrappers_v2_asm.o,
+    readonly object croutine.o,
+    readonly object event_groups.o,
+    readonly object list.o,
+    readonly object queue.o,
+    readonly object stream_buffer.o,
+    readonly object tasks.o,
+    readonly object timers.o,
+    readonly object heap_4.o,
+    readonly object port.o,
+    readonly object port_asm.o,
+    readonly object mpu_wrappers_v2_asm.o,
+};
+
+define block _text_memcpy with fixed order, alignment = 4
+{
+    section .text object memcpy.o,
+    readonly object memcpy.o
+};
+
+define block _text_fsl_netc_endpoint with fixed order, alignment = 4
+{
+    section .text object "fsl_netc_endpoint.o",
+    readonly object "fsl_netc_endpoint.o"
+};
+
+define block text with fixed order, alignment = 4 { block _text_CodeQuickAccess, block _text_freertos_kernel, block _text_memcpy, block _text_fsl_netc_endpoint};
+
+define block slow_text with alignment = 4, fixed order { section .text*, readonly };
+
+define block ncache_init with alignment = 4   { section NonCacheable.init };
+define block ncache with alignment = 4, fixed order    { section *.bss.ep_rx_buff, section NonCacheable };
+
+define block data with alignment = 4, fixed order { section .data*, section DataQuickAccess };
+define block slow_bss with alignment = 4, fixed order {
+    section *.bss* object sys_arch.o,
+    section *.bss* object api_lib.o,
+    section *.bss* object api_msg.o,
+    section *.bss* object err.o,
+    section *.bss* object if_api.o,
+    section *.bss* object netbuf.o,
+    section *.bss* object netdb.o,
+    section *.bss* object netifapi.o,
+    section *.bss* object sockets.o,
+    section *.bss* object tcpip.o,
+    section *.bss* object lwiperf.o,
+    section *.bss* object acd.o,
+    section *.bss* object dhcp.o,
+    section *.bss* object etharp.o,
+    section *.bss* object icmp.o,
+    section *.bss* object igmp.o,
+    section *.bss* object ip4.o,
+    section *.bss* object ip4_addr.o,
+    section *.bss* object ip4_frag.o,
+    section *.bss* object dhcp6.o,
+    section *.bss* object ethip6.o,
+    section *.bss* object icmp6.o,
+    section *.bss* object inet6.o,
+    section *.bss* object ip6.o,
+    section *.bss* object ip6_addr.o,
+    section *.bss* object ip6_frag.o,
+    section *.bss* object mld6.o,
+    section *.bss* object nd6.o,
+    section *.bss* object altcp.o,
+    section *.bss* object altcp_alloc.o,
+    section *.bss* object altcp_tcp.o,
+    section *.bss* object def.o,
+    section *.bss* object dns.o,
+    section *.bss* object inet_chksum.o,
+    section *.bss* object init.o,
+    section *.bss* object ip.o,
+    section *.bss* object mem.o,
+    section *.bss* object memp.o,
+    section *.bss* object netif.o,
+    section *.bss* object pbuf.o,
+    section *.bss* object raw.o,
+    section *.bss* object stats.o,
+    section *.bss* object sys.o,
+    section *.bss* object tcp.o,
+    section *.bss* object tcp_in.o,
+    section *.bss* object tcp_out.o,
+    section *.bss* object timeouts.o,
+    section *.bss* object auth.o,
+    section *.bss* object ccp.o,
+    section *.bss* object chap-md5.o,
+    section *.bss* object chap_ms.o,
+    section *.bss* object demand.o,
+    section *.bss* object eap.o,
+    section *.bss* object ecp.o,
+    section *.bss* object eui64.o,
+    section *.bss* object fsm.o,
+    section *.bss* object ipcp.o,
+    section *.bss* object ipv6cp.o,
+    section *.bss* object lpc.o,
+    section *.bss* object magic.o,
+    section *.bss* object mppe.o,
+    section *.bss* object multilink.o,
+    section *.bss* object ppp.o,
+    section *.bss* object pppapi.o,
+    section *.bss* object pppcrypt.o,
+    section *.bss* object pppoe.o,
+    section *.bss* object pppol2tp.o,
+    section *.bss* object pppos.o,
+    section *.bss* object upap.o,
+    section *.bss* object utils.o,
+    section *.bss* object vj.o,
+    section *.bss* object bridgeif.o,
+    section *.bss* object bridgeif_fdb.o,
+    section *.bss* object ethernet.o,
+    section *.bss* object lowpan6.o,
+    section *.bss* object lowpan6_ble.o,
+    section *.bss* object lowpan6_common.o,
+    section *.bss* object slipif.o,
+    section *.bss* object zepif.o,
+};
+
+define block bss with alignment = 4, fixed order { zi, section COMMON };
+
+define block CSTACK    with alignment = 8, size = STACK_SIZE   { };
+define block HEAP      with alignment = 8, size = HEAP_SIZE     { };
+define block UCHEAP      with alignment = 8, minimum size = 32K, expanding size { };
+define block _stack_heap  with fixed order { block HEAP, block UCHEAP, block CSTACK};
+
+define exported symbol __NCACHE_REGION_START = m_ocram1_nc_start;
+define exported symbol __NCACHE_REGION_SIZE = m_ocram1_nc_size;
+define exported symbol __ucHeapBase__ = m_system_tcm_start + HEAP_SIZE;
+define exported symbol ucHeap = __ucHeapBase__;
+define exported symbol __ucHeapSize = m_system_tcm_size - (HEAP_SIZE + STACK_SIZE);
+
+place at address mem: m_code_tcm_start    { readonly section .intvec };
+keep { readonly section .intvec };
+
+place in m_code_tcm {block interrupts, block text};
+
+place in m_ocram1 {block slow_text};
+place in m_ocram1 {block slow_bss};
+
+place in m_ocram1_nc {block ncache_init};
+place in m_ocram1_nc {block ncache};
+
+place in m_code_tcm {block data};
+place in m_code_tcm {block bss};
+
+place in m_system_tcm {block _stack_heap };

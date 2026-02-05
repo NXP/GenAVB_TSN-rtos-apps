@@ -1,0 +1,44 @@
+manifest:
+  remotes:
+  - name: nxp-zephyr
+    url-base: https://github.com/nxp-zephyr
+  - name: nxp-mcuxpresso
+    url-base: https://github.com/nxp-mcuxpresso
+  defaults:
+    remote: nxp-mcuxpresso
+  projects:
+    - name: bifrost
+      path: bifrost
+      remote: nxp-zephyr
+      revision: dev_gen_avb
+      west-commands: scripts/west_commands.yml
+      groups:
+        - bifrost
+    - name: mcu-sdk-examples-int
+      path: mcuxsdk/examples_int
+      revision: bf0dc9172dd5faf6bc433a0d902575ecab823e4a
+      groups:
+      - bifrost
+    - name: mcu-sdk-ecosystem
+      path: mcuxsdk/ecosystem
+      revision: dev_gen_avb_25_12_00
+      west-commands: scripts/west_commands.yml
+      groups:
+      - bifrost
+    - name: sdk_components
+      path: mcuxsdk/ecosystem/sdk_generator/modules/sdk_components
+      revision: e8d5be6bbd6643374a68ec8f6b9e7c5f334e461a
+      groups:
+      - bifrost
+    - name: sdk_generator
+      path: mcuxsdk/ecosystem/sdk_generator
+      revision: f2dcdec22e1d3aeb56258e1b01e89f2090c07136
+      submodules:
+      - path: modules/manifest_schema
+      groups:
+      - bifrost
+    - name: MIR
+      path: mcuxsdk/MIR
+      revision: dev_gen_avb_25_12_00
+      groups:
+      - bifrost

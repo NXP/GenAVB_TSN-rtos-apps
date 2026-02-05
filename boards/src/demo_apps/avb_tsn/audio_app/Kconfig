@@ -1,0 +1,34 @@
+# Copyright 2025 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+menu "GenAVB/TSN Application Configuration"
+
+config MCUX_PRJSEG_config.board.audio_app
+    bool
+    default y
+    select APP_MCR
+    select APP_LWIP
+    select APP_STORAGE
+    select MCUX_COMPONENT_component.i2c_adapter_interface
+    select MCUX_COMPONENT_component.rtos_apps.audio
+    select MCUX_COMPONENT_component.rtos_apps.audio.genavb
+    select MCUX_COMPONENT_component.rtos_apps.tsn_headers
+    select MCUX_COMPONENT_driver.dmamux
+    select MCUX_COMPONENT_driver.edma
+    select MCUX_COMPONENT_driver.lpi2c
+    select MCUX_COMPONENT_driver.sai
+    select MCUX_COMPONENT_middleware.genavb.apps.aem_manager
+    select MCUX_COMPONENT_middleware.genavb.avtp
+    select MCUX_COMPONENT_middleware.genavb.avdecc
+
+config APP_MCR
+    bool "Application Board Media Clock Recovery support"
+    default n
+
+rsource "../common/Kconfig"
+rsource "../common/Kconfig.prjseg"
+source "${SdkRootDirPath}/${board_root}/${board}/demo_apps/avb_tsn/Kconfig.common_deps"
+endmenu
+
+source "${SdkRootDirPath}/Kconfig.mcuxpresso"

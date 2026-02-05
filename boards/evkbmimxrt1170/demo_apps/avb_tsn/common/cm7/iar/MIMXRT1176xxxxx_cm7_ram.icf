@@ -1,0 +1,87 @@
+/*
+** ###################################################################
+**     Processors:          MIMXRT1176AVM8A_cm7
+**                          MIMXRT1176AVM8B_cm7
+**                          MIMXRT1176CVM8A_cm7
+**                          MIMXRT1176CVM8B_cm7
+**                          MIMXRT1176DVMAA_cm7
+**                          MIMXRT1176DVMAB_cm7
+**
+**     Compiler:            IAR ANSI C/C++ Compiler for ARM
+**     Reference manual:    IMXRT1170RM, Rev 1, 02/2021
+**     Version:             rev. 1.1, 2022-04-02
+**     Build:               b250415
+**
+**     Abstract:
+**         Linker file for the IAR ANSI C/C++ Compiler for ARM
+**
+**     Copyright 2016 Freescale Semiconductor, Inc.
+**     Copyright 2016-2025 NXP
+**     SPDX-License-Identifier: BSD-3-Clause
+**
+**     http:                 www.nxp.com
+**     mail:                 support@nxp.com
+**
+** ###################################################################
+*/
+
+/* Board memory map */
+define symbol m_itcm_start             = 0x00000000;
+define symbol m_itcm_size              = 0x00040000;
+
+define symbol m_dtcm_start             = 0x20000000;
+define symbol m_dtcm_size              = 0x00040000;
+
+define symbol m_ocram2_nc_start        = 0x2033E000;
+define symbol m_ocram2_nc_size         = 0x00002000;
+
+define symbol m_ocram1_start           = 0x20240000;
+define symbol m_ocram1_size            = 0x00080000;
+
+define symbol m_ocram2_start           = 0x202C0000;
+define symbol m_ocram2_size            = 0x0007E000;
+
+/* Sizes */
+if (isdefinedsymbol(__stack_size__)) {
+  define symbol __size_cstack__        = __stack_size__;
+} else {
+  define symbol __size_cstack__        = 0x0400;
+}
+
+if (isdefinedsymbol(__heap_size__)) {
+  define symbol __size_heap__          = __heap_size__;
+} else {
+  define symbol __size_heap__          = 0x0400;
+}
+
+define exported symbol __VECTOR_TABLE          = m_itcm_start;
+define exported symbol __VECTOR_RAM            = m_itcm_start;
+define exported symbol __RAM_VECTOR_TABLE_SIZE = 0x0;
+
+define memory mem with size = 4G;
+define region itcm = mem:[from m_itcm_start size m_itcm_size];
+define region dtcm = mem:[from m_dtcm_start size m_dtcm_size];
+define region ocram1 = mem:[from m_ocram1_start size m_ocram1_size];
+define region ocram2 = mem:[from m_ocram2_start size m_ocram2_size];
+define region ocram2_nc = mem:[from m_ocram2_nc_start size m_ocram2_nc_size];
+
+define block CSTACK    with alignment = 8, size = __size_cstack__   { };
+define block HEAP      with alignment = 8, size = __size_heap__     { };
+define block UCHEAP      with alignment = 8, minimum size = 32K, expanding size { };
+define block RW            { readwrite };
+define block ZI            { zi };
+define block NCACHE_VAR    { section NonCacheable , section NonCacheable.init };
+define block QACCESS_CODE  { section CodeQuickAccess };
+
+do not initialize  { section .noinit };
+
+place at address mem: m_interrupts_start    { readonly section .intvec };
+
+place in itcm                               { readonly };
+place in ocram1                             { block RW };
+place in ocram2                             { block ZI };
+place in ocram2_nc                          { block NCACHE_VAR };
+place in itcm                               { block QACCESS_CODE };
+place in dtcm                               { block HEAP };
+place in dtcm                               { block UCHEAP };
+place at end of dtcm                        { block CSTACK };

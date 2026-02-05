@@ -1,0 +1,46 @@
+avb_audio_app:
+  section-type: application
+  contents:
+    meta_path: examples/demo_apps/avb_tsn/avb_audio_app
+    project-root-path: boards/${board}/demo_apps/avb_tsn/avb_audio_app/${multicore_foldername}
+    document:
+      name: avb_audio_app${core_id_suffix_name}
+      category: demo_apps
+      brief: avb_audio_app
+  boards:
+    evkbmimxrt1170@cm7:
+    - +armgcc@release
+    - +armgcc@debug
+    - -armgcc@flexspi_nor_debug
+    - -armgcc@flexspi_nor_release
+    - -iar@debug
+    - -iar@flexspi_nor_debug
+    - -iar@flexspi_nor_release
+    - -iar@release
+    - -iar@sdram_debug
+    - -iar@sdram_release
+    - -mdk@debug
+    - -mdk@flexspi_nor_debug
+    - -mdk@flexspi_nor_release
+    - -mdk@release
+    - -mdk@sdram_debug
+    - -mdk@sdram_release
+    evkbimxrt1050:
+    - +armgcc@debug
+    - +armgcc@release
+    - -armgcc@flexspi_nor_sdram_debug
+    - -armgcc@flexspi_nor_sdram_release
+    - -armgcc@sdram_txt_debug
+    - -armgcc@sdram_txt_release
+    - -iar@flexspi_nor_sdram_debug
+    - -iar@flexspi_nor_sdram_release
+    - -iar@ram_0x1400_debug
+    - -iar@ram_0x1400_release
+    - -iar@sdram_txt_debug
+    - -iar@sdram_txt_release
+    - -mdk@flexspi_nor_sdram_debug
+    - -mdk@flexspi_nor_sdram_release
+    - -mdk@ram_0x1400_debug
+    - -mdk@ram_0x1400_release
+    - -mdk@sdram_txt_debug
+    - -mdk@sdram_txt_release

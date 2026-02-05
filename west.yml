@@ -1,0 +1,56 @@
+# The west manifest file for Freertos Applications
+
+manifest:
+  defaults:
+    remote: nxp
+
+  remotes:
+    - name: nxp
+      url-base: https://github.com/NXP
+    - name: nxp-mcuxpresso
+      url-base: https://github.com/nxp-mcuxpresso
+    - name: nxp-realtimeedge
+      url-base: https://github.com/nxp-real-time-edge-sw
+
+  group-filter:
+  - -bifrost
+
+  projects:
+    - name: mcuxsdk-manifests
+      remote: nxp-mcuxpresso
+      revision: 5c7834363c9aac6f6341347b7d8c587145be32e5
+      import:
+        name-allowlist:
+          - core
+          - freertos-kernel
+          - CMSIS
+          - mcux-sdk-middleware-sdmmc
+          - lwip
+          - littlefs
+          - mcu-sdk-components
+          - mcu-sdk-examples
+          - mcux-devices-rt
+          - mcux-devices-mcx
+          - motor_control
+          - rtcesl
+          - freemaster
+          # include lvgl in order to remove kconfig definition warnings.
+          - lvgl
+    - name: GenAVB_TSN
+      path: mcuxsdk/middleware/gen_avb
+      revision: 75ee384780b6dd061db628343d8a4aa95531bd70
+    - name: rtos-abstraction-layer
+      path: mcuxsdk/components/rtos-abstraction-layer
+      revision: bede9f04902953adab96c9a7d5121eca3e5dbcc8
+    - name: rtos-apps
+      path: mcuxsdk/components/rtos-apps
+      revision: a10b6515aea3610ac8d22b4414235b560d884b3e
+    - name: heterogeneous-multicore
+      remote: nxp-realtimeedge
+      path: mcuxsdk/middleware/heterogeneous-multicore
+      revision: 20fff5054c15be15a6f7e4053312e483f27223bf
+
+  self:
+    west-commands: scripts/west-commands.yml
+    import:
+    - submanifests/internal.yml

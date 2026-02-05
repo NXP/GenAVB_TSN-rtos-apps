@@ -1,0 +1,23 @@
+# Copyright 2025 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+config MCUX_PRJSEG_config.board.tsn
+    bool "MIMXRT1170 EVKB TSN endpoint configuration"
+    default y
+    select APP_TSN_ENDPOINT
+    select APP_USER_BUTTON
+    select APP_QBV
+    select APP_FP
+    select MCUX_COMPONENT_middleware.genavb.srp
+    select MCUX_COMPONENT_driver.semc
+
+config MCUX_PRJSEG_config.board.tsn_motor_controller
+    bool "MIMXRT1170 EVKB TSN Motor Controller configuration"
+    default n
+    select APP_MOTOR_CONTROLLER
+
+config MCUX_PRJSEG_config.board.tsn_motor_iodevice
+    bool "MIMXRT1170 EVKB TSN Motor IO-device configuration"
+    default n
+    select APP_MOTOR_IO_DEVICE
