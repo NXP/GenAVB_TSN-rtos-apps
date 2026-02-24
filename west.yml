@@ -38,7 +38,7 @@ manifest:
           - lvgl
     - name: GenAVB_TSN
       path: mcuxsdk/middleware/gen_avb
-      revision: 75ee384780b6dd061db628343d8a4aa95531bd70
+      revision: 1ecbf6e920011bbbd12567d8ac0de09434d79859
     - name: rtos-abstraction-layer
       path: mcuxsdk/components/rtos-abstraction-layer
       revision: bede9f04902953adab96c9a7d5121eca3e5dbcc8

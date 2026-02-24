@@ -1,7 +1,7 @@
 NXP Software Content Register
 
 Release Name:           genavb_tsn-apps-rtos
-Version:                7_6_0
+Version:                7_6_1
 Date Created:           February-2026
 License File:           LICENSE.txt
 Release Location:       https://github.com/NXP/GenAVB_TSN-rtos-apps

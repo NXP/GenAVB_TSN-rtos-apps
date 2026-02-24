@@ -57,7 +57,7 @@ if "%SKIP_WEST%"=="0" (
         exit /b 1
     )
 
-    set PATH=%WORKSPACE_DIR%\.venv\Scripts;%PATH%
+    set PATH=!WORKSPACE_DIR!\.venv\Scripts;!PATH!
 
 
     west update
