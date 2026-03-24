@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2025 NXP
+ * Copyright 2021-2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -318,6 +318,9 @@ void BOARD_ConfigMPU(void)
 #if !defined(CACHE_MODE_WRITE_THROUGH)
     /* non-shareable, read/write in privilege and non-privilege, executable. Attr 3 */
     ARM_MPU_SetRegion(0U, ARM_MPU_RBAR(BOARD_HYPERRAM_START_ADDR, ARM_MPU_SH_NON, 0U, 1U, 0U), ARM_MPU_RLAR(BOARD_HYPERRAM_START_ADDR + (BOARD_HYPERRAM_SIZE - 1), 3U));
+#else
+    /* non-shareable, read/write in privilege and non-privilege, executable. Attr 1 (non cacheable - for debugging only)  */
+    ARM_MPU_SetRegion(0U, ARM_MPU_RBAR(BOARD_HYPERRAM_START_ADDR, ARM_MPU_SH_NON, 0U, 1U, 0U), ARM_MPU_RLAR(BOARD_HYPERRAM_START_ADDR + (BOARD_HYPERRAM_SIZE - 1), 2U));
 #endif
 #endif
 

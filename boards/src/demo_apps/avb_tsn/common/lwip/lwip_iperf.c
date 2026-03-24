@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2020, 2023, 2025 NXP
+ * Copyright 2018-2020, 2023, 2025-2026 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -89,7 +89,8 @@ static shell_status_t tcp_client(shell_handle_t shell, int32_t argc, char **argv
         tcp_client_session = NULL;
     }
 
-    IP4_ADDR(&addr, tmp[0], tmp[1], tmp[2], tmp[3]);
+    IP_ADDR4(&addr, tmp[0], tmp[1], tmp[2], tmp[3]);
+
 #ifndef LWIPERF_TOS_DEFAULT
     tcp_client_session = lwiperf_start_tcp_client(&addr, LWIPERF_TCP_PORT_DEFAULT, LWIPERF_CLIENT, -100000000, &lwiperf_report, shell);
 #else

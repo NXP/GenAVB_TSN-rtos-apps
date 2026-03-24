@@ -27,3 +27,10 @@ patches:
   email: rui.sousa@nxp.com
   date: '2019-06-27'
   apply-command: git am
+- path: 0001-Netconf-patch.patch
+  sha256sum: 6eabf9bc70d3a10fb681f7c58a0489fb6961269a767222f87373de296085d3a5
+  module: mcuxsdk/middleware/lwip
+  author: Bhanu Chander Gaddoju
+  email: bhanu.gaddoju@nxp.com
+  date: '2026-02-04'
+  apply-command: git am

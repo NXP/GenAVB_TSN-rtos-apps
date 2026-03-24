@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2025 NXP
+ * Copyright 2021-2026 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -41,6 +41,10 @@
 #define ELE_PING_TIMEOUT_COUNT ((12 * 60 * 60 * 1000) / MAIN_TASK_DELAY_MS) /* 12 hours */
 
 extern bool idle_hook_enabled;
+
+#ifdef CONFIG_APP_NETCONF
+extern int mcux_netconf_init(void);
+#endif
 
 #ifdef CONFIG_APP_TSN_ENDPOINT
 static const char *prompt = "HYBRID";
@@ -139,6 +143,10 @@ static void main_task(void *data)
     }
 
     shell_start(&init);
+
+#ifdef CONFIG_APP_NETCONF
+    mcux_netconf_init();
+#endif
 
     multicore_init();
 

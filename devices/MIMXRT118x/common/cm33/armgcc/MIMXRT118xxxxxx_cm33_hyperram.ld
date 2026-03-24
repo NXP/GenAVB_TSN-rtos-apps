@@ -12,7 +12,7 @@
 **         Linker file for the GNU C Compiler
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -43,12 +43,12 @@ m_hyperram_start     = DEFINED(BOARD_HYPERRAM_START_ADDR) ? BOARD_HYPERRAM_START
 m_hyperram_text_size = 0x00100000; /* 1 MB */
 m_hyperram_data_size = 0x00700000; /* 7 MB */
 
-m33_max_image_size = 1M;
+m33_max_image_size = (m_flash_size / 2);
 
 lfs_size           = (m_flash_size / 2);
 lfs_start          = m_flash_start + lfs_size;
 
-HEAP_SIZE          = DEFINED(__heap_size__)  ? __heap_size__  : 0x0400;
+HEAP_SIZE          = DEFINED(__heap_size__)  ? __heap_size__  : 0x00680000;
 STACK_SIZE         = DEFINED(__stack_size__) ? __stack_size__ : 0x1000;
 
 /* Specify the memory areas */
@@ -94,6 +94,28 @@ SECTIONS
     . = ALIGN(4);
   } > m_flash
 
+  /* libcurl libssh libyang mcux-netconf netconf2 netopeer2 pcre2 sysrepo  */
+  .flash_text :
+  {
+    . = ALIGN(4);
+    *middleware/lwip*.c.obj(*.text* *.rodata*)
+    */mbedtls3x/*(*.text* *.rodata*)
+    */freertos-emb-posix/*(*.text* *.rodata*)
+    */freertos-posix/FreeRTOS-Plus-POSIX/source/*(*.text* *.rodata*)
+    */psa_crypto_driver/*(*.text* *.rodata*)
+    */libcrypt.a:*(*.text* *.rodata*)
+    */liblibcurl.a:*(*.text* *.rodata*)
+    */liblibssh.a:*(*.text* *.rodata*)
+    */liblibyang.a:*(*.text* *.rodata*)
+    */libmcux-netconf.a:*(*.text* *.rodata*)
+    */libnetconf2.a:*(*.text* *.rodata*)
+    */libnetopeer2.a:*(*.text* *.rodata*)
+    */libpcre2.a:*(*.text* *.rodata*)
+    */libsysrepo.a:*(*.text* *.rodata*)
+    *libmcux-yang-modules.a:*(*.text* *.rodata*)
+    *libsysrepo-genavb.a:*(*.text* *.rodata*)
+  } > m_flash
+
  .hyperram_text :
   {
     __hyperram_text_load = LOADADDR(.hyperram_text);
@@ -108,6 +130,24 @@ SECTIONS
     __hyperram_data_load = LOADADDR(.hyperram_data);
     . = ALIGN(4);
     __hyperram_data_start = .;
+
+    */mbedtls3x/*(*.data*)
+    */freertos-emb-posix/*(*.data*)
+    */freertos-posix/FreeRTOS-Plus-POSIX/source/*(*.data*)
+    */psa_crypto_driver/*(*.data*)
+    */libcrypt.a:*(*.data*)
+    */liblibcurl.a:*(*.data*)
+    */liblibssh.a:*(*.data*)
+    */liblibyang.a:*(*.data*)
+    */libmcux-netconf.a:*(*.data*)
+    */libmcux-posix.a:*(*.data*)
+    */libnetconf2.a:*(*.data*)
+    */libnetopeer2.a:*(*.data*)
+    */libpcre2.a:*(*.data*)
+    */libsysrepo.a:*(*.data*)
+    *libmcux-yang-modules.a:*(*.data*)
+    *libsysrepo-genavb.a:*(*.data*)
+
     . = ALIGN(4);
     __hyperram_data_end = .;
   } > m_hyperram_data AT> m_flash
@@ -116,6 +156,23 @@ SECTIONS
   {
     . = ALIGN(4);
     __hyperram_bss_start = .;
+    */mbedtls3x/*(*.bss*)
+    */freertos-emb-posix/*(*.bss*)
+    */freertos-posix/FreeRTOS-Plus-POSIX/source/*(*.bss*)
+    */psa_crypto_driver/*(*.bss*)
+    */libcrypt.a:*(*.bss*)
+    */liblibcurl.a:*(*.bss*)
+    */liblibssh.a:*(*.bss*)
+    */liblibyang.a:*(*.bss*)
+    */libmcux-netconf.a:*(*.bss*)
+    */libmcux-posix.a:*(*.bss*)
+    */libnetconf2.a:*(*.bss*)
+    */libnetopeer2.a:*(*.bss*)
+    */libpcre2.a:*(*.bss*)
+    */libsysrepo.a:*(*.bss*)
+    *libmcux-yang-modules.a:*(*.bss*)
+    *libsysrepo-genavb.a:*(*.bss*)
+
     . = ALIGN(4);
     __hyperram_bss_end = .;
     ;

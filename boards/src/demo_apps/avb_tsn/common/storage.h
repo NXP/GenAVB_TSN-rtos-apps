@@ -1,5 +1,5 @@
 /*
- * Copyright 2020, 2022-2025 NXP
+ * Copyright 2020, 2022-2026 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -51,5 +51,6 @@ int storage_write(const char *filename, const char *buf, unsigned int len);
 int storage_init(void);
 int storage_set_shell(void *shell);
 void storage_exit(void);
+void *storage_get_lfs(void);
 
 #endif /* _STORAGE_H_ */

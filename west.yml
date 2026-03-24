@@ -36,9 +36,11 @@ manifest:
           - freemaster
           # include lvgl in order to remove kconfig definition warnings.
           - lvgl
+          - mbedtls3x
+          - psa_crypto_driver
     - name: GenAVB_TSN
       path: mcuxsdk/middleware/gen_avb
-      revision: 1ecbf6e920011bbbd12567d8ac0de09434d79859
+      revision: e851a1947c8f501d978e9873732d11142550d0a3
     - name: rtos-abstraction-layer
       path: mcuxsdk/components/rtos-abstraction-layer
       revision: bede9f04902953adab96c9a7d5121eca3e5dbcc8

@@ -1,6 +1,6 @@
 # GenAVB/TSN RTOS Applications
 
-GenAVB/TSN stack reference applications for RTOS covering both AVB and TSN use cases, running on i.MX RT 4-digit and MCX E series family of devices.
+GenAVB/TSN stack reference applications for RTOS covering both AVB and TSN use cases, running on i.MX RTxxx and MCX E series family of devices.
 
 ## Overview
 
@@ -10,7 +10,7 @@ This repository provides a comprehensive set of AVB/TSN example applications dem
 
 ## Supported Hardware
 
-This release supports the following boards:
+This release supports the following i.MX RTxxx EVK boards:
 
 | SoC            | Board Name        | Description                    |
 |----------------|-------------------|--------------------------------|
@@ -36,9 +36,9 @@ All dependencies are managed through the [Zephyr west tool](https://docs.zephyrp
 
 ### Prerequisites
 
-#### GNU ARM Embedded Toolchain
+#### ARM GNU Toolchain
 
-Download and install GNU ARM toolchain version 14.2.Rel1:
+Download and install ARM GCC toolchain version 14.2.Rel1:
 
 **Linux:**
 ```bash
@@ -60,7 +60,7 @@ set ARMGCC_DIR=C:\Program Files (x86)\Arm GNU Toolchain arm-none-eabi\14.2 Rel1
 ```bash
 sudo apt update
 sudo apt install git python3 python3-pip cmake ninja-build
-pip3 install west # you might need a virtual environment here
+pip3 install west # you might need a wirtual environment here
 ```
 
 **Windows:**
@@ -140,135 +140,58 @@ bootstrap.bat
 ```
 
 The bootstrap scripts will:
-- Create Python virtual environment (.venv)
-- Install all required Python packages (west, MCUX SDK dependencies)
 - Update the west workspace with all required repositories
-- Apply required patches to MCUX SDK for full application functionality
 - Download and extract ARM GCC toolchain (if `ARMGCC_DIR` not set)
 - Create required symbolic links
-- Export ARMGCC_DIR environment variable
-- Navigate to the mcuxsdk directory
+- Set up Python virtual environment
+- Install all required Python packages
 
-After bootstrap completes, the working directory will be mcuxsdk and the environment is ready to build applications.
+After bootstrap completes, the repo is ready to build applications.
+
+### Netconf Support prerequisites
+GenAVB/TSN release provides Netconf support for i.MX RT1180 board. To enable Netconf support, ensure the following prerequisites are met:
+
+Download Netconf additionals packages (sysrepo-genavb , mcux-yang and mcux-netconf) from nxp.com or contact NXP support.
+
+Install sysrepo-genavb sources in the west workspace:
+
+```cmd
+cd <workspace>/mcuxsdk/components
+tar -xzf  sysrepo-genavb-<version>.tar.gz
+```
+
+Install mcux-yang sources in the workspace:
+
+```cmd
+cd <workspace>/mcuxsdk/components
+tar -xzf mcux-yang-<version>.tar.gz
+```
+
+Install mcux-netconf sources in the workspace:
+
+```cmd
+cd <workspace>
+unzip mcux-netconf-<version>.zip
+```
 
 ### Building Applications
 
-Navigate to the SDK root directory and use the `west build` command. The generic command format is:
+Navigate to the SDK root directory and use the `west build` command:
 
 ```bash
-west build -p always examples/demo_apps/avb_tsn/<app> --toolchain armgcc --config <config> -b <board> -Dcore_id=<core> -DCONF_FILE=<file>
+cd <workspace>/mcuxsdk
+west build -p always examples/demo_apps/avb_tsn/tsn_app --toolchain armgcc --config release -b evkbmimxrt1170 -Dcore_id=cm7
 ```
-Build artifacts will be generated in the `build/` directory by default.
+
+Build artifacts will be in the `build/` directory.
 
 **Build Command Parameters:**
 - `-p always` - Pristine build (clean before building)
-- `--toolchain armgcc` - Use ARM GNU toolchain
-- `--config <config>` - Build configuration
-- `-b <board>` - Target board name (e.g. evkbmimxrt1170, evkmimxrt1180, ...)
-- `-Dcore_id=<core>` - Target core (cm7, cm33, ...)
+- `--toolchain armgcc` - Use ARM GCC toolchain
+- `--config release` - Build in release configuration (use `debug` for debug build)
+- `-b <board>` - Target board name (e.g., evkbmimxrt1170, evkmimxrt1180)
+- `-Dcore_id=<core>` - Target core (cm7, cm33, etc.)
 - `-d <dir>` - Build directory (optional, defaults to `build/`)
-- `-DCONF_FILE=<file>` - Optional build configuration file
-
-**Build Modes and Configurations**
-
-The detailed combinations of build command parameters are listed below, for each of the supported devices.
-
-**i.MX RT1150**
-
-For i.MX RT1050 two example applications are provided: AVB Endpoint and Milan AVB Endpoint. The applications can be built in “release” mode. 
-
-| **app**            | **config** | **board**    | **core**  | **file** |
-|--------------------|-----------------------|-------------------|------------------------|---------------------|
-| audio_app          | release               | evkbimxrt1050     |                        |                     |
-| avb_audio_app      | release               | evkbimxrt1050     |                        |                     |
-
-
-**i.MX RT1170**
-
-For i.MX RT1170 three example applications are provided: TSN Endpoint, AVB Endpoint, and Milan AVB Endpoint. Each application can be built in “release” or “ram_release” mode. The “release” images boot from external QuadSPI NOR flash and then relocate to internal memory (Code TCM, System TCM and OCRAM). The “ram_release” images boot from internal memory.
-
-For TSN Endpoint application, the “sdram_release” mode is also available, and it boots from external QuadSPI NOR flash and then relocates to internal memory (Code TCM, System TCM, OCRAM and Sdram).
-
-
-| **app**            | **config**             | **board**          | **core**                 | **file**  |
-|--------------------|------------------------|--------------------|--------------------------|--------------------------|
-| tsn_app            | release                | evkbmimxrt1170     | cm7                      |                          |
-| tsn_app            | ram_release            | evkbmimxrt1170     | cm7                      |                          |
-| tsn_app            | sdram_release          | evkbmimxrt1170     | cm7                      |                          |
-| tsn_app            | release_motor          | evkbmimxrt1170     | cm7                      | examples/_boards/evkbmimxrt1170/demo_apps/avb_tsn/tsn_app/cm7/prj_motor_controller.conf;examples/_boards/evkbmimxrt1170/demo_apps/avb_tsn/tsn_app/cm7/prj_motor_iodevice.conf |
-| tsn_app            | ram_release_motor      | evkbmimxrt1170     | cm7                      | examples/_boards/evkbmimxrt1170/demo_apps/avb_tsn/tsn_app/cm7/prj_motor_controller.conf;examples/_boards/evkbmimxrt1170/demo_apps/avb_tsn/tsn_app/cm7/prj_motor_iodevice.conf |
-| audio_app          | release                | evkbmimxrt1170     | cm7                      |                          |
-| audio_app          | ram_release            | evkbmimxrt1170     | cm7                      |                          |
-| avb_audio_app      | release                | evkbmimxrt1170     | cm7                      |                          |
-| avb_audio_app      | ram_release            | evkbmimxrt1170     | cm7                      |                          |
-
-**i.MX RT1180**
-
-For i.MX RT1180 TSN applications, two example applications with three supported configurations are provided: TSN Bridge, TSN Endpoint and a combined TSN Bridge + Endpoint, which run respectively on Cortex-M33, Cortex-M7 and Cortex-M33 cores. Each application can be built in “release”, “hyperram_release” or “ram_release” mode. The “release” images boot from external QuadSPI NOR flash and then relocate to internal memory (Code TCM, System TCM and OCRAM). The hyperram_release boots from external QuadSPI NOR flash and then relocates to internal memory (Code TCM, System TCM, OCRAM and Hyperram). The “ram_release” images boot from internal memory.
-
-For the TSN Bridge application, two configurations are available (combined with the build mode).
-
-For the TSN Endpoint application, four configurations are available (combined with the build mode).
-
-For i.MX RT1180 DSA applications, two example applications are provided: DSA ENETC CPU port and DSA Switch CPU port, both of which running on Cortex-M33 core. Each application can be built in “release” or “ram_release” mode, following the same boot sequence as the previous section’s description.
-
-| **app**     | **config**                 | **board**          | **core** | **file**  |
-|-------------|----------------------------|--------------------|----------|-----------|
-| tsn_app     | release                    | evkmimxrt1180      | cm33     |           |
-| tsn_app     | hyperram_release           | evkmimxrt1180      | cm33     |           |
-| tsn_app     | ram_release                | evkmimxrt1180      | cm33     |           |
-| tsn_app     | release_no_enetc0          | evkmimxrt1180      | cm33     | examples/_boards/evkmimxrt1180/demo_apps/avb_tsn/tsn_app/core/prj_no_enetc0.conf |
-| tsn_app     | ram_release_no_enetc0      | evkmimxrt1180      | cm33     | examples/_boards/evkmimxrt1180/demo_apps/avb_tsn/tsn_app/core/prj_no_enetc0.conf |
-| tsn_app     | release_hybrid             | evkmimxrt1180      | cm33     | examples/_boards/evkmimxrt1180/demo_apps/avb_tsn/tsn_app/core/prj_hybrid.conf |
-| tsn_app     | ram_release_hybrid         | evkmimxrt1180      | cm33     | examples/_boards/evkmimxrt1180/demo_apps/avb_tsn/tsn_app/core/prj_hybrid.conf |
-| tsn_app     | release                    | evkmimxrt1180      | cm7      |           |
-| tsn_app     | ram_release                | evkmimxrt1180      | cm7      |           |
-| tsn_app     | release_enetc0             | evkmimxrt1180      | cm7      | examples/_boards/evkmimxrt1180/demo_apps/avb_tsn/tsn_app/cm7/prj_enetc0.conf |
-| tsn_app     | ram_release_enetc0         | evkmimxrt1180      | cm7      | examples/_boards/evkmimxrt1180/demo_apps/avb_tsn/tsn_app/cm7/prj_enetc0.conf |
-| tsn_app     | release_motor_controller   | evkmimxrt1180      | cm7      | examples/_boards/evkmimxrt1180/demo_apps/avb_tsn/tsn_app/cm7/prj_motor_controller.conf |
-| tsn_app     | ram_release_motor_controller | evkmimxrt1180    | cm7      | examples/_boards/evkmimxrt1180/demo_apps/avb_tsn/tsn_app/cm7/prj_motor_controller.conf |
-| tsn_app     | release_motor_iodevice     | evkmimxrt1180      | cm7      | examples/_boards/evkmimxrt1180/demo_apps/avb_tsn/tsn_app/cm7/prj_motor_iodevice.conf |
-| tsn_app     | ram_release_motor_iodevice | evkmimxrt1180      | cm7      | examples/_boards/evkmimxrt1180/demo_apps/avb_tsn/tsn_app/cm7/prj_motor_iodevice.conf |
-| dsa_enetc     | release                    | evkmimxrt1180      | cm33     |           |
-| dsa_enetc     | ram_release                | evkmimxrt1180      | cm33     |           |
-| dsa_switch     | release                    | evkmimxrt1180      | cm33     |           |
-| dsa_switch     | ram_release                | evkmimxrt1180      | cm33     |           |
-
-**i.MX RT1186**
-
-For i.MX RT1186 TSN applications, two example applications with three supported configurations are provided: TSN Bridge, TSN Endpoint and a combined TSN Bridge + Endpoint, which run respectively on Cortex-M33, Cortex-M7 and Cortex-M33 cores. Each application can be built in “release”, “hyperram_release” or “ram_release” mode. The “release” images boot from external QuadSPI NOR flash and then relocate to internal memory (Code TCM, System TCM and OCRAM). The hyperram_release boots from external QuadSPI NOR flash and then relocates to internal memory (Code TCM, System TCM, OCRAM and Hyperram). The “ram_release” images boot from internal memory.
-
-For the TSN Bridge application, two configurations are available (combined with the build mode).
-
-For the TSN Endpoint application, two configurations are available (combined with the build mode).
-
-| **app**     | **config**                 | **board**          | **core** | **file**  |
-|-------------|----------------------------|--------------------|----------|-----------|
-| tsn_app     | release                    | frdmimxrt1186      | cm33     |           |
-| tsn_app     | hyperram_release           | frdmimxrt1186      | cm33     |           |
-| tsn_app     | ram_release                | frdmimxrt1186      | cm33     |           |
-| tsn_app     | release_hybrid             | frdmimxrt1186      | cm33     | examples/_boards/frdmimxrt1186/demo_apps/avb_tsn/tsn_app/core/prj_hybrid.conf |
-| tsn_app     | ram_release_hybrid         | frdmimxrt1186      | cm33     | examples/_boards/frdmimxrt1186/demo_apps/avb_tsn/tsn_app/core/prj_hybrid.conf |
-| tsn_app     | release                    | frdmimxrt1186      | cm7      |           |
-| tsn_app     | ram_release                | frdmimxrt1186      | cm7      |           |
-| tsn_app     | release_motor_controller   | frdmimxrt1186      | cm7      | examples/_boards/frdmimxrt1186/demo_apps/avb_tsn/tsn_app/cm7/prj_motor_controller.conf |
-| tsn_app     | ram_release_motor_controller | frdmimxrt1186    | cm7      | examples/_boards/frdmimxrt1186/demo_apps/avb_tsn/tsn_app/cm7/prj_motor_controller.conf |
-
-**MCX E247**
-
-For the MCX E31B one example application is provided: gPTP Endpoint. The application can be built in “release” mode.  
-
-| **app**            | **config** | **board**    | **core**  | **file** |
-|-------------|------------------------|--------------------|-----------------------|--------------------------|
-| tsn_app     | release                | frdmmcxe247        |                       |                          |
-
-**MCX E31B**
-
-For the MCX E31B one example application is provided: TSN Endpoint. The application can be built in “release” mode.
-
-| **app**            | **config** | **board**    | **core**  | **file** |
-|-------------|------------------------|--------------------|-----------------------|--------------------------|
-| tsn_app     | release                | frdmmcxe31b        |                       |                          |
 
 ## Activating the Virtual Environment
 

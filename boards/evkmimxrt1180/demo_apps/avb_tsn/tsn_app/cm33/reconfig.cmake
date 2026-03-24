@@ -53,3 +53,7 @@ mcux_add_source(
     SOURCES
     ${device_root}/${soc_portfolio}/${soc_series}/MIMXRT118x/common/${core_id}/main.c
 )
+
+if(CONFIG_APP_NETCONF)
+    include (${SdkRootDirPath}/${board_root}/${board}/demo_apps/avb_tsn/tsn_app/${core_id}/netconf.cmake OPTIONAL)
+endif()

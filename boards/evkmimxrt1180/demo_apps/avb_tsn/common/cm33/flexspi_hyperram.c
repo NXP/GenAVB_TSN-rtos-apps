@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2017, 2024-2025 NXP
+ * Copyright 2016-2017, 2024-2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -104,7 +104,7 @@ status_t BOARD_InitHYPERRAM(void) {
     /* Init FLEXSPI. */
     config.rxSampleClock               = EXAMPLE_FLEXSPI_HYPERRAM_RX_SAMPLE_CLOCK;
     config.enableSckBDiffOpt           = true;
-    config.ahbConfig.enableAHBPrefetch = true;
+    config.ahbConfig.enableAHBPrefetch = false;
     config.enableCombination           = true;
 
     /*Allow AHB read start address do not follow the alignment requirement. */

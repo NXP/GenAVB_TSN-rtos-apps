@@ -1,0 +1,55 @@
+From 819560271dd412113912ec65fbaa9951ced11103 Mon Sep 17 00:00:00 2001
+From: Bhanu Chander Gaddoju <bhanu.gaddoju@nxp.com>
+Date: Wed, 4 Feb 2026 11:10:11 +0530
+Subject: [PATCH] Netconf patch
+
+FreeRTOS-POSIX wrappers have another version of clock_gettime(). Used pvt_clock_gettime to avoid conflict
+
+Signed-off-by: Bhanu Chander Gaddoju <bhanu.gaddoju@nxp.com>
+---
+ src/apps/lwiperf/lwiperf.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/src/apps/lwiperf/lwiperf.c b/src/apps/lwiperf/lwiperf.c
+index d1a622bd..a04da772 100644
+--- a/src/apps/lwiperf/lwiperf.c
++++ b/src/apps/lwiperf/lwiperf.c
+@@ -89,7 +89,7 @@
+ 
+ #define BLOCK_SIZE (1024 * 128)
+ 
+-/** The IDs of clocks used by clock_gettime() */
++/** The IDs of clocks used by pvt_clock_gettime() */
+ #define CLOCK_MONOTONIC 1
+ 
+ /** The resolution of the clock in microseconds */
+@@ -283,7 +283,7 @@ static err_t lwiperf_udp_tx_start(lwiperf_state_udp_t *conn);
+ 
+ /** Get time roughly derived from lwIP's sys_now(), ms resolution clock */
+ static int
+-clock_gettime(int clk_id, struct timespec *tp)
++pvt_clock_gettime(int clk_id, struct timespec *tp)
+ {
+   u32_t now = sys_now();
+   LWIP_UNUSED_ARG(clk_id);
+@@ -1228,7 +1228,7 @@ lwiperf_udp_client_send_more(lwiperf_state_udp_t *conn)
+     return;
+   }
+   /* check time/bw */
+-  clock_gettime(CLOCK_MONOTONIC, &ts);
++  pvt_clock_gettime(CLOCK_MONOTONIC, &ts);
+   diff_ts(&conn->udp_lastpkt, &ts, &dt);
+   if ((uint32_t)((dt.tv_sec * 1000000) + (dt.tv_nsec / 1000)) < conn->delay_target)
+     return;
+@@ -1497,7 +1497,7 @@ lwiperf_udp_recv(void *arg, struct udp_pcb *pcb, struct pbuf *p,
+   else if (datagramID >= 0) {
+     struct timespec ts, dt;
+     uint32_t transit;
+-    clock_gettime(CLOCK_MONOTONIC, &ts);
++    pvt_clock_gettime(CLOCK_MONOTONIC, &ts);
+     if (!conn || !conn->have_settings_buf) {
+       /* allocate struct for a new client */
+       if (!conn) {
+-- 
+2.34.1
+

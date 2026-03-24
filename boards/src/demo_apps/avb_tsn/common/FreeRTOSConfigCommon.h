@@ -1,7 +1,7 @@
 /*
  * FreeRTOS Kernel V10.2.0
  * Copyright (C) 2019 Amazon.com, Inc. or its affiliates.  All Rights Reserved.
- * Copyright 2018-2023, 2025 NXP
+ * Copyright 2018-2023, 2025-2026 NXP
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -62,6 +62,9 @@
 #define configUSE_NEWLIB_REENTRANT              0
 #define configENABLE_BACKWARD_COMPATIBILITY     0
 #define configNUM_THREAD_LOCAL_STORAGE_POINTERS 5
+#define configTASK_NOTIFICATION_ARRAY_ENTRIES   3
+#define configUSE_APPLICATION_TASK_TAG	        1
+#define INCLUDE_xSemaphoreGetMutexHolder        1
 
 /* Used memory allocation (heap_x.c) */
 #define configFRTOS_MEMORY_SCHEME               4
@@ -71,7 +74,9 @@
 /* Memory allocation related definitions. */
 #define configSUPPORT_STATIC_ALLOCATION         1
 #define configSUPPORT_DYNAMIC_ALLOCATION        1
+#ifndef configTOTAL_HEAP_SIZE
 #define configTOTAL_HEAP_SIZE                   ((unsigned long)__ucHeapSize)
+#endif
 #define configAPPLICATION_ALLOCATED_HEAP        1	/* heap is defined dynamically in the linker script */
 
 /* Hook function related definitions. */

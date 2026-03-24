@@ -1,9 +1,10 @@
 /*
- * Copyright 2020, 2022-2025 NXP
+ * Copyright 2020, 2022-2026 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
+#include <stddef.h>
 #include <stdint.h>
 
 #include "storage.h"
@@ -32,6 +33,11 @@ static char old_dir[MAX_PWD_LENGTH] = "/";
 static char absolute_path[MAX_PATH_LENGTH];
 
 extern int lfs_get_default_config(const struct lfs_config **lfsc);
+
+void *storage_get_lfs(void)
+{
+    return &storage.lfs;
+}
 
 static void canonical_path(void *shell, char *path)
 {
@@ -989,5 +995,6 @@ int storage_set_shell(void *shell) {return -1;}
 void storage_exit(void) {return;}
 int storage_get_dir(const char *dirname, unsigned int n, char *subdirname, unsigned int len) {return -1;}
 int storage_get_file(const char *dirname, unsigned int n, char *filename, unsigned int len) {return -1;}
+void *storage_get_lfs(void) {return NULL;}
 
 #endif
