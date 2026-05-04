@@ -1,0 +1,33 @@
+From b6d68b25e7eff740b7977807eb8aac1c3c746c5a Mon Sep 17 00:00:00 2001
+From: Tobias Aguiar <tobias.aguiarsilvadealmeida@nxp.com>
+Date: Fri, 10 Apr 2026 08:01:56 +0200
+Subject: [PATCH] definitions_schema.json: extend build
+ configuration support beyond the deafult ones in custom applications
+
+When using example.yml to derive commands for VS Code support, the
+custom_application field can only support release and debug
+configurations, which will limit the what can be supported for the
+AVB/TSN use case. Extend the the configuration support to support the
+configurations to resolve this issue.
+
+Signed-off-by: Tobias Aguiar <tobias.aguiarsilvadealmeida@nxp.com>
+---
+ scripts/data_schema/definitions_schema.json | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/scripts/data_schema/definitions_schema.json b/scripts/data_schema/definitions_schema.json
+index faad5d52..8b4effd2 100644
+--- a/scripts/data_schema/definitions_schema.json
++++ b/scripts/data_schema/definitions_schema.json
+@@ -317,7 +317,7 @@
+         },
+         "toolchainTargetSupportType": {
+             "type": "string",
+-            "pattern": "^(\\+|\\-)(iar|mdk|armgcc|xcc|xtensa|codewarrior|riscvllvm)@\\w*(debug|release)$"
++            "pattern": "^(\\+|\\-)(iar|mdk|armgcc|xcc|xtensa|codewarrior|riscvllvm)@[A-Za-z0-9_]*(debug|release)(_[A-Za-z0-9_]+)?$"
+         },
+         "versionType": {
+             "type": "string",
+-- 
+2.34.1
+

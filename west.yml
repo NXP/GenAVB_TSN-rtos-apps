@@ -1,0 +1,58 @@
+# The west manifest file for Freertos Applications
+
+manifest:
+  defaults:
+    remote: nxp
+
+  remotes:
+    - name: nxp
+      url-base: https://github.com/NXP
+    - name: nxp-mcuxpresso
+      url-base: https://github.com/nxp-mcuxpresso
+    - name: nxp-realtimeedge
+      url-base: https://github.com/nxp-real-time-edge-sw
+
+  group-filter:
+  - -bifrost
+
+  projects:
+    - name: mcuxsdk-manifests
+      remote: nxp-mcuxpresso
+      revision: 3f3935ffa531b2f0b7826d6ff6e1a15c2f35e9dc
+      import:
+        name-allowlist:
+          - core
+          - freertos-kernel
+          - CMSIS
+          - mcux-sdk-middleware-sdmmc
+          - lwip
+          - littlefs
+          - mcu-sdk-components
+          - mcu-sdk-examples
+          - mcux-devices-rt
+          - mcux-devices-mcx
+          - motor_control
+          - rtcesl
+          - freemaster
+          # include lvgl in order to remove kconfig definition warnings.
+          - lvgl
+          - mbedtls3x
+          - psa_crypto_driver
+          - mcuxsdk-tool-data
+    - name: GenAVB_TSN
+      path: mcuxsdk/middleware/gen_avb
+      revision: "8_0_0"
+    - name: rtos-abstraction-layer
+      path: mcuxsdk/components/rtos-abstraction-layer
+      revision: "1_7_0"
+    - name: rtos-apps
+      path: mcuxsdk/components/rtos-apps
+      revision: "1_3_0"
+    - name: heterogeneous-multicore
+      remote: nxp-realtimeedge
+      path: mcuxsdk/middleware/heterogeneous-multicore
+      revision: genavbtsn_8_0_internal
+
+  self:
+    import:
+    - submanifests/internal.yml

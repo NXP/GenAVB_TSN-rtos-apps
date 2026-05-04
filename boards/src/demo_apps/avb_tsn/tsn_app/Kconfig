@@ -1,0 +1,64 @@
+# Copyright 2025-2026 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+menu "GenAVB/TSN TSN App configuration"
+config MCUX_PRJSEG_config.board.tsn_app
+    bool
+    default y
+
+config MCUX_PRJSEG_config.board.app_tsn_endpoint
+    bool
+    default y if APP_TSN_ENDPOINT
+    select MCUX_COMPONENT_component.rtos_apps.tsn
+    select MCUX_COMPONENT_component.rtos_apps.tsn.lwip if APP_LWIP
+    select APP_USER_BUTTON if ((MCUX_HW_DEVICE_ID_MIMXRT1189xxxxx || MCUX_HW_DEVICE_ID_MIMXRT1176xxxxx) && MCUX_HW_CORE_CM7F)
+
+config APP_TSN_ENDPOINT
+    bool "TSN Endpoint support"
+    default n
+
+config APP_USER_BUTTON
+    bool "User Button support"
+    default n
+    select MCUX_COMPONENT_component.rtos_apps.user_button
+
+config APP_SERIAL
+    bool "Serial support"
+    default n
+    select MCUX_COMPONENT_component.rtos_apps.serial
+
+config MCUX_PRJSEG_config.board.app_motor_iodevice
+    bool
+    default y if APP_MOTOR_IO_DEVICE
+    select MCUX_COMPONENT_component.rtos_apps.tsn.motor.iodevice
+    select MCUX_COMPONENT_middleware.rtcesl.cm7f
+    select MCUX_COMPONENT_driver.lpadc if (MCUX_HW_DEVICE_ID_MIMXRT1189xxxxx || MCUX_HW_DEVICE_ID_MIMXRT1176xxxxx) && MCUX_HW_CORE_CM7F
+    select MCUX_COMPONENT_driver.eqdc if MCUX_HW_DEVICE_ID_MIMXRT1189xxxxx && MCUX_HW_CORE_CM7F
+    select MCUX_COMPONENT_driver.xbar_1 if MCUX_HW_DEVICE_ID_MIMXRT1189xxxxx && MCUX_HW_CORE_CM7F
+    select MCUX_COMPONENT_middleware.motor_control.mc_drivers_adcimxrt1180_pwma_enc if MCUX_HW_DEVICE_ID_MIMXRT1189xxxxx && MCUX_HW_CORE_CM7F
+    select MCUX_COMPONENT_middleware.mc_pmsm_enc.float if (MCUX_HW_DEVICE_ID_MIMXRT1189xxxxx || MCUX_HW_DEVICE_ID_MIMXRT1176xxxxx) && MCUX_HW_CORE_CM7F || MCUX_HW_DEVICE_ID_MCXE31B 
+    select MCUX_COMPONENT_driver.enc if MCUX_HW_DEVICE_ID_MIMXRT1176xxxxx && MCUX_HW_CORE_CM7F
+    select MCUX_COMPONENT_driver.xbara if MCUX_HW_DEVICE_ID_MIMXRT1176xxxxx && MCUX_HW_CORE_CM7F
+    select MCUX_COMPONENT_driver.adc_etc if MCUX_HW_DEVICE_ID_MIMXRT1176xxxxx && MCUX_HW_CORE_CM7F
+    select MCUX_COMPONENT_driver.acmp if MCUX_HW_DEVICE_ID_MIMXRT1176xxxxx && MCUX_HW_CORE_CM7F
+    select MCUX_COMPONENT_middleware.motor_control.mc_drivers_adcimxrt11xx_pwma_enc if MCUX_HW_DEVICE_ID_MIMXRT1176xxxxx && MCUX_HW_CORE_CM7F
+    select MCUX_COMPONENT_driver.pit if MCUX_HW_DEVICE_ID_MCXE31B
+    select MCUX_COMPONENT_driver.sar_adc if MCUX_HW_DEVICE_ID_MCXE31B
+    select MCUX_COMPONENT_driver.trgmux if MCUX_HW_DEVICE_ID_MCXE31B
+    select MCUX_COMPONENT_driver.bctu if MCUX_HW_DEVICE_ID_MCXE31B
+    select MCUX_COMPONENT_driver.lcu if MCUX_HW_DEVICE_ID_MCXE31B
+    select MCUX_COMPONENT_middleware.motor_control.mc_drivers_mcxe3xx if MCUX_HW_DEVICE_ID_MCXE31B
+
+config MCUX_PRJSEG_config.board.app_motor_controller
+    bool
+    default y if APP_MOTOR_CONTROLLER
+    select MCUX_COMPONENT_component.rtos_apps.tsn.motor.controller
+    select MCUX_COMPONENT_component.rtos_apps.tsn.lwip if APP_LWIP
+
+rsource "../common/Kconfig"
+rsource "../common/Kconfig.prjseg"
+source "$(app_root_path)/boards/${board}/demo_apps/avb_tsn/tsn_app/Kconfig"
+endmenu
+
+source "${SdkRootDirPath}/Kconfig.mcuxpresso"

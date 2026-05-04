@@ -1,0 +1,350 @@
+From 397ca70ae613dc19fec970472a2be2c320e6a595 Mon Sep 17 00:00:00 2001
+From: Rui Sousa <rui.sousa@nxp.com>
+Date: Tue, 28 Jan 2020 10:12:56 +0100
+Subject: [PATCH] Runtime debug console output control
+
+Add support to disable/enable the debug console output at run time.
+
+Signed-off-by: Rui Sousa <rui.sousa@nxp.com>
+---
+ debug_console/CMakeLists.txt                  |  9 +++++-
+ debug_console/Kconfig                         |  7 ++++
+ debug_console/doxygen/debug_console.dox       | 16 ++++++++++
+ debug_console/fsl_debug_console.c             | 27 ++++++++++++++++
+ debug_console/fsl_debug_console.h             | 18 ++++++++++-
+ debug_console_lite/CMakeLists.txt             |  9 +++++-
+ debug_console_lite/Kconfig                    |  7 ++++
+ .../doxygen/debug_console_lite.dox            | 16 ++++++++++
+ debug_console_lite/fsl_debug_console.c        | 32 +++++++++++++++++++
+ debug_console_lite/fsl_debug_console.h        | 31 +++++++++++++++++-
+ 10 files changed, 168 insertions(+), 4 deletions(-)
+
+diff --git a/debug_console/CMakeLists.txt b/debug_console/CMakeLists.txt
+index e6cf71b9..fbe474d7 100644
+--- a/debug_console/CMakeLists.txt
++++ b/debug_console/CMakeLists.txt
+@@ -36,4 +36,11 @@ if (CONFIG_MCUX_COMPONENT_utility.debug_console_template_config)
+ endif()
+ 
+ if (CONFIG_MCUX_PRJSEG_utility.debug_console.generated_config)
+-endif ()
+\ No newline at end of file
++endif ()
++
++if (CONFIG_MCUX_PRJSEG_utility.debug_console_run_time_control)
++    mcux_add_configuration(
++        CC "-DDEBUG_CONSOLE_RUNTIME_CONTROL"
++        CX "-DDEBUG_CONSOLE_RUNTIME_CONTROL"
++    )
++endif()
+diff --git a/debug_console/Kconfig b/debug_console/Kconfig
+index c374be9a..c1f6e879 100644
+--- a/debug_console/Kconfig
++++ b/debug_console/Kconfig
+@@ -35,6 +35,13 @@ config MCUX_PRJSEG_utility.debug_console_transfer_non_blocking
+         IO interrupt is enable, otherwise there is no output.
+         And non-blocking is combine with buffer, no matter bare-metal or rtos.
+ 
++config MCUX_PRJSEG_utility.debug_console_run_time_control
++    bool "Enable runtime debug console control"
++    default n
++    depends on MCUX_COMPONENT_utility.debug_console
++    help
++        Enable runtime control of debug console output through gDbgConsoleEnabled variable.
++
+ config MCUX_COMPONENT_utility.debug_console_template_config
+     bool "debug_console template configuration header file"
+     default n
+diff --git a/debug_console/doxygen/debug_console.dox b/debug_console/doxygen/debug_console.dox
+index f1f01000..2b40f7ef 100644
+--- a/debug_console/doxygen/debug_console.dox
++++ b/debug_console/doxygen/debug_console.dox
+@@ -62,6 +62,22 @@ DbgConsole_Init(BOARD_DEBUG_UART_INSTANCE, BOARD_DEBUG_UART_BAUDRATE, BOARD_DEBU
+ 
+ The debug console provides input and output functions to scan and print formatted data.
+ 
++### Runtime Control {#DbgConsoleRuntimeControl}
++
++When DEBUG_CONSOLE_RUNTIME_CONTROL is enabled, debug console output can be controlled at runtime using the API functions DbgConsole_SetEnabled() and DbgConsole_SetDisabled().
++
++~~~~~{.c}
++// Disable debug console output
++DbgConsole_SetDisabled();
++PRINTF("This will not be printed\n");
++
++// Re-enable debug console output
++DbgConsole_SetEnabled();
++PRINTF("This will be printed\n");
++~~~~~
++
++### Format Specifiers
++
+ + Support a format specifier for PRINTF following this prototype
+ <span>" %[flags][width][.precision][length]specifier"</span>, which is explained below
+ 
+diff --git a/debug_console/fsl_debug_console.c b/debug_console/fsl_debug_console.c
+index 274d15ce..2c6b0863 100644
+--- a/debug_console/fsl_debug_console.c
++++ b/debug_console/fsl_debug_console.c
+@@ -55,6 +55,10 @@
+ #include "task.h"
+ #endif
+ 
++#if defined(DEBUG_CONSOLE_RUNTIME_CONTROL)
++static bool gDbgConsoleEnabled = true;
++#endif
++
+ /*******************************************************************************
+  * Definitions
+  ******************************************************************************/
+@@ -1045,12 +1049,32 @@ DEBUG_CONSOLE_FUNCTION_PREFIX status_t DbgConsole_Flush(void)
+ #endif
+ 
+ #if (defined(SDK_DEBUGCONSOLE) && (SDK_DEBUGCONSOLE == DEBUGCONSOLE_REDIRECT_TO_SDK))
++
++#if defined(DEBUG_CONSOLE_RUNTIME_CONTROL)
++void DbgConsole_SetState(bool state)
++{
++    gDbgConsoleEnabled = state;
++}
++#endif
++
++static inline bool DbgConsole_IsEnabled(void)
++{
++#if defined(DEBUG_CONSOLE_RUNTIME_CONTROL)
++    return gDbgConsoleEnabled;
++#else
++    return true;
++#endif
++}
++
+ /* See fsl_debug_console.h for documentation of this function. */
+ int DbgConsole_Printf(const char *fmt_s, ...)
+ {
+     va_list ap;
+     int result = 0;
+ 
++    if (!DbgConsole_IsEnabled())
++        return 0;
++
+     va_start(ap, fmt_s);
+     result = DbgConsole_Vprintf(fmt_s, ap);
+     va_end(ap);
+@@ -1064,6 +1088,9 @@ int DbgConsole_Vprintf(const char *fmt_s, va_list formatStringArg)
+     int logLength = 0, result = 0;
+     char printBuf[DEBUG_CONSOLE_PRINTF_MAX_LOG_LEN] = {'\0'};
+ 
++    if (!DbgConsole_IsEnabled())
++        return 0;
++
+     if (NULL != g_serialHandle)
+     {
+         /* format print log first */
+diff --git a/debug_console/fsl_debug_console.h b/debug_console/fsl_debug_console.h
+index 14e28d7c..8f643120 100644
+--- a/debug_console/fsl_debug_console.h
++++ b/debug_console/fsl_debug_console.h
+@@ -1,6 +1,6 @@
+ /*
+  * Copyright (c) 2013 - 2015, Freescale Semiconductor, Inc.
+- * Copyright 2016-2018, 2020, 2024 NXP
++ * Copyright 2016-2018, 2020, 2024-2025 NXP
+  *
+  * SPDX-License-Identifier: BSD-3-Clause
+  *
+@@ -148,6 +148,22 @@ status_t DbgConsole_EnterLowpower(void);
+  */
+ status_t DbgConsole_ExitLowpower(void);
+ 
++#if defined(DEBUG_CONSOLE_RUNTIME_CONTROL)
++/*!
++ * @brief Sets the debug console output state at runtime.
++ *
++ * Call this function to set the debug console output state when DEBUG_CONSOLE_RUNTIME_CONTROL
++ * is defined. After calling this function, DbgConsole_Printf and related
++ * functions can enable or disable printing output messages.
++ *
++ * @note This function is only available when DEBUG_CONSOLE_RUNTIME_CONTROL is defined.
++ * @note The function has no effect if the debug console is already enabled.
++ *
++ * @param state    Desired output state (activated or deactivated).
++ */
++void DbgConsole_SetState(bool state);
++#endif
++
+ #else
+ /*!
+  * Use an error when SDK_DEBUGCONSOLE is not DEBUGCONSOLE_REDIRECT_TO_SDK and
+diff --git a/debug_console_lite/CMakeLists.txt b/debug_console_lite/CMakeLists.txt
+index 54b17c76..eb760abc 100644
+--- a/debug_console_lite/CMakeLists.txt
++++ b/debug_console_lite/CMakeLists.txt
+@@ -12,4 +12,11 @@ if (CONFIG_MCUX_COMPONENT_utility.debug_console_lite)
+         INCLUDES .
+     )
+ 
+-endif()
+\ No newline at end of file
++endif()
++
++if (CONFIG_MCUX_PRJSEG_utility.debug_console_run_time_control)
++    mcux_add_configuration(
++        CC "-DDEBUG_CONSOLE_RUNTIME_CONTROL"
++        CX "-DDEBUG_CONSOLE_RUNTIME_CONTROL"
++    )
++endif()
+diff --git a/debug_console_lite/Kconfig b/debug_console_lite/Kconfig
+index 490e4dc9..82488a47 100644
+--- a/debug_console_lite/Kconfig
++++ b/debug_console_lite/Kconfig
+@@ -12,3 +12,10 @@ config MCUX_COMPONENT_utility.debug_console_lite
+     if MCUX_COMPONENT_utility.debug_console_lite
+ 
+     endif
++
++config MCUX_PRJSEG_utility.debug_console_run_time_control
++    bool "Enable runtime debug console control"
++    default n
++    depends on MCUX_COMPONENT_utility.debug_console_lite
++    help
++        Enable runtime control of debug console output through gDbgConsoleEnabled variable.
+diff --git a/debug_console_lite/doxygen/debug_console_lite.dox b/debug_console_lite/doxygen/debug_console_lite.dox
+index 15ce2527..e5532999 100644
+--- a/debug_console_lite/doxygen/debug_console_lite.dox
++++ b/debug_console_lite/doxygen/debug_console_lite.dox
+@@ -68,6 +68,22 @@ DbgConsole_Init(BOARD_DEBUG_USART_INSTANCE, BOARD_DEBUG_USART_BAUDRATE, BOARD_DE
+ 
+ The debug console provides input and output functions to scan and print formatted data.
+ 
++### Runtime Control {#DbgConsoleRuntimeControl}
++
++When DEBUG_CONSOLE_RUNTIME_CONTROL is enabled, debug console output can be controlled at runtime using the API functions DbgConsole_SetEnabled() and DbgConsole_SetDisabled().
++
++~~~~~{.c}
++// Disable debug console output
++DbgConsole_SetDisabled();
++PRINTF("This will not be printed\n");
++
++// Re-enable debug console output
++DbgConsole_SetEnabled();
++PRINTF("This will be printed\n");
++~~~~~
++
++### Format Specifiers
++
+ + Support a format specifier for PRINTF following this prototype
+ <span>" %[flags][width][.precision][length]specifier"</span>, which is explained below
+ 
+diff --git a/debug_console_lite/fsl_debug_console.c b/debug_console_lite/fsl_debug_console.c
+index 28f6f374..b3ef263d 100644
+--- a/debug_console_lite/fsl_debug_console.c
++++ b/debug_console_lite/fsl_debug_console.c
+@@ -19,6 +19,10 @@
+ #pragma diag_suppress 1256
+ #endif /* __CC_ARM */
+ 
++#if defined(DEBUG_CONSOLE_RUNTIME_CONTROL)
++static bool gDbgConsoleEnabled = true;
++#endif
++
+ /*******************************************************************************
+  * Definitions
+  ******************************************************************************/
+@@ -143,12 +147,37 @@ status_t DbgConsole_ExitLowpower(void)
+ #endif /* DEBUGCONSOLE_REDIRECT_TO_SDK */
+ 
+ #if (defined(SDK_DEBUGCONSOLE) && (SDK_DEBUGCONSOLE == DEBUGCONSOLE_REDIRECT_TO_SDK))
++
++#if defined(DEBUG_CONSOLE_RUNTIME_CONTROL)
++void DbgConsole_SetEnabled(void)
++{
++    gDbgConsoleEnabled = true;
++}
++
++void DbgConsole_SetDisabled(void)
++{
++    gDbgConsoleEnabled = false;
++}
++#endif
++
++static inline bool DbgConsole_IsEnabled(void)
++{
++#if defined(DEBUG_CONSOLE_RUNTIME_CONTROL)
++    return gDbgConsoleEnabled;
++#else
++    return true;
++#endif
++}
++
+ /* See fsl_debug_console.h for documentation of this function. */
+ int DbgConsole_Printf(const char *fmt_s, ...)
+ {
+     va_list ap;
+     int result = 0;
+ 
++    if (!DbgConsole_IsEnabled())
++        return 0;
++
+     va_start(ap, fmt_s);
+     result = DbgConsole_Vprintf(fmt_s, ap);
+     va_end(ap);
+@@ -167,6 +196,9 @@ int DbgConsole_Vprintf(const char *fmt_s, va_list formatStringArg)
+         return -1;
+     }
+ 
++    if (!DbgConsole_IsEnabled())
++        return 0;
++
+     result = DbgConsole_PrintfFormattedData(DbgConsole_Putchar, fmt_s, formatStringArg);
+ 
+     return result;
+diff --git a/debug_console_lite/fsl_debug_console.h b/debug_console_lite/fsl_debug_console.h
+index df1674df..439873f4 100644
+--- a/debug_console_lite/fsl_debug_console.h
++++ b/debug_console_lite/fsl_debug_console.h
+@@ -1,5 +1,5 @@
+ /*
+- * Copyright 2017-2018, 2020, 2022, 2024 NXP
++ * Copyright 2017-2018, 2020, 2022, 2024-2025 NXP
+  *
+  *
+  * SPDX-License-Identifier: BSD-3-Clause
+@@ -254,6 +254,35 @@ int DbgConsole_Scanf(char *fmt_s, ...);
+  */
+ int DbgConsole_Getchar(void);
+ 
++#if defined(DEBUG_CONSOLE_RUNTIME_CONTROL)
++/*!
++ * @brief Enables the debug console output at runtime.
++ *
++ * Call this function to enable debug console output when DEBUG_CONSOLE_RUNTIME_CONTROL
++ * is defined. After calling this function, DbgConsole_Printf and related
++ * functions will output messages.
++ *
++ * @note This function is only available when DEBUG_CONSOLE_RUNTIME_CONTROL is defined.
++ * @note The function has no effect if the debug console is already enabled.
++ *
++ */
++void DbgConsole_SetEnabled(void);
++
++/*!
++ * @brief Disables the debug console output at runtime.
++ *
++ * Call this function to disable debug console output when DEBUG_CONSOLE_RUNTIME_CONTROL
++ * is defined. After calling this function, DbgConsole_Printf and related
++ * functions will return immediately without outputting messages. This can be used to
++ * suppress output in specific environments defined by the user.
++ *
++ * @note This function is only available when DEBUG_CONSOLE_RUNTIME_CONTROL is defined.
++ * @note The function has no effect if the debug console is already disabled.
++ *
++ */
++void DbgConsole_SetDisabled(void);
++#endif
++
+ #endif /* SDK_DEBUGCONSOLE */
+ 
+ /*! @} */
+-- 
+2.34.1
+

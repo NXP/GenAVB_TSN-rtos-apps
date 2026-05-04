@@ -1,0 +1,25 @@
+# Copyright 2025-2026 NXP
+#
+# SPDX License Identifier: BSD-3-Clause
+
+rsource "../Kconfig.common_deps"
+
+config MCUX_PRJSEG_config.board.tsn
+    bool "MCXE31B FRDM TSN endpoint configuration"
+    default y
+    imply APP_LWIP
+    select APP_TSN_ENDPOINT
+    imply APP_USER_BUTTON
+    select APP_QBV
+    select APP_FP
+    select MCUX_COMPONENT_middleware.genavb.srp
+
+config MCUX_PRJSEG_config.board.tsn_motor_controller
+    bool "MCXE31B FRDM TSN Motor Controller configuration"
+    default n
+    select APP_MOTOR_CONTROLLER
+
+config MCUX_PRJSEG_config.board.tsn_motor_iodevice
+    bool "MCXE31B FRDM TSN Motor IO-device configuration"
+    default n
+    select APP_MOTOR_IO_DEVICE

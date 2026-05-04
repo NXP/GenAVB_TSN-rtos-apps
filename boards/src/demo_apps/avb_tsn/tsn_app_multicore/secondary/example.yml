@@ -1,0 +1,33 @@
+tsn_app_multicore_secondary:
+  skip_build: true
+  section-type: application
+  contents:
+    meta_path: ../GenAVB_TSN-rtos-apps/boards/src/demo_apps/avb_tsn/tsn_app_multicore/secondary
+    project-root-path: boards/${board}/demo_apps/avb_tsn/tsn_app/${multicore_foldername}
+    document:
+      name: tsn_app_multicore_secondary${core_id_suffix_name}
+      category: demo_apps
+      brief: tsn_app multicore secondary
+    toolchains:
+      - -armgcc@debug
+      - -armgcc@flexspi_nor_debug
+      - -armgcc@flexspi_nor_release
+      - -armgcc@sdram_debug
+      - -armgcc@sdram_release
+      - -iar@debug
+      - -iar@release
+      - -iar@flexspi_nor_debug
+      - -iar@flexspi_nor_release
+      - -iar@sdram_debug
+      - -iar@sdram_release
+      - -mdk@debug
+      - -mdk@release
+      - -mdk@flexspi_nor_debug
+      - -mdk@flexspi_nor_release
+      - -mdk@sdram_debug
+      - -mdk@sdram_release
+  boards:
+    evkmimxrt1180@cm7:
+    - +armgcc@release
+    frdmimxrt1186@cm7:
+    - +armgcc@release

@@ -1,0 +1,14 @@
+NXP Software Content Register
+
+Release Name:           genavb_tsn-apps-rtos
+Version:                8_0_0
+Date Created:           May-2026
+Outgoing License:       BSD-3 Clause
+License File:           LICENSE.txt
+Release Location:       https://github.com/NXP/GenAVB_TSN-rtos-apps
+Description:            GenAVB/TSN RTOS demo applications sources
+Origin:                 NXP (BSD-3-Clause)
+                        FreeRTOS - Amazon (MIT) - https://github.com/FreeRTOS/FreeRTOS-Kernel (v10.5.1)
+                        LWIP - Swedish Institute of Computer Science (BSD-3-Clause) - http://savannah.nongnu.org/projects/lwip (2023-01-03, SHA-1: 3fe8d2fc43a9b69f7ed28c63d44a7744f9c0def9)
+
+----------------------------------------

@@ -1,0 +1,41 @@
+# Copyright 2025 NXP
+#
+# SPDX License Identifier: BSD-3-Clause
+
+menu "GenAVB/TSN applications board configuration"
+
+config MCUX_PRJSEG_module.board.avbtsn_default_board_files
+    bool
+    default y if MCUX_HW_DEVICE_ID_MIMXRT1052xxxxB ||\
+    MCUX_HW_DEVICE_ID_MCXE31B ||\
+    MCUX_HW_DEVICE_ID_MCXE247
+
+config MCUX_PRJSEG_module.board.avbtsn_default_coreid_board_files
+    bool
+    default y if MCUX_HW_DEVICE_ID_MIMXRT1189xxxxx || MCUX_HW_DEVICE_ID_MIMXRT1186xxxxx || MCUX_HW_DEVICE_ID_MIMXRT1176xxxxx 
+
+config MCUX_PRJSEG_module.board.avbtsn_default_genavb_sdk_files
+    bool
+    default y if MCUX_HW_DEVICE_ID_MIMXRT1176xxxxx ||\
+    MCUX_HW_DEVICE_ID_MIMXRT1052xxxxB ||\
+    MCUX_HW_DEVICE_ID_MCXE31B ||\
+    MCUX_HW_DEVICE_ID_MCXE247
+
+config MCUX_PRJSEG_module.board.avbtsn_rt118x_default_device_files
+    bool
+    default y if MCUX_HW_DEVICE_ID_MIMXRT1189xxxxx || MCUX_HW_DEVICE_ID_MIMXRT1186xxxxx
+
+config MCUX_PRJSEG_module.board.avbtsn_rt118x_device_default_genavb_sdk_files
+    bool
+    default y if MCUX_HW_DEVICE_ID_MIMXRT1189xxxxx || MCUX_HW_DEVICE_ID_MIMXRT1186xxxxx
+
+config MCUX_PRJSEG_module.board.avbtsn_default_startup_files
+    bool
+    default y if MCUX_HW_DEVICE_ID_MIMXRT1189xxxxx ||\
+    MCUX_HW_DEVICE_ID_MIMXRT1186xxxxx ||\
+    MCUX_HW_DEVICE_ID_MIMXRT1176xxxxx ||\
+    MCUX_HW_DEVICE_ID_MIMXRT1052xxxxB ||\
+    MCUX_HW_DEVICE_ID_MCXE31B ||\
+    MCUX_HW_DEVICE_ID_MCXE247
+
+endmenu

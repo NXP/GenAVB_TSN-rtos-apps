@@ -1,0 +1,259 @@
+From dcf4dd5c4807269cdc7a1d425cc9f1dc93f99443 Mon Sep 17 00:00:00 2001
+From: Rui Sousa <rui.sousa@nxp.com>
+Date: Tue, 28 Jan 2020 10:19:02 +0100
+Subject: [PATCH] Use Insert key to enable shell and remove exit
+ command
+
+Use "Insert" key to enable shell/disable debug console.
+Remove "exit" command from available commands.
+
+Signed-off-by: Rui Sousa <rui.sousa@nxp.com>
+---
+ shell/CMakeLists.txt    | 11 ++++--
+ shell/Kconfig           |  9 +++++
+ shell/doxygen/shell.dox | 10 ++++++
+ shell/fsl_shell.c       | 75 +++++++++++++++++++++++++++++++++++++++++
+ shell/fsl_shell.h       | 30 +++++++++++++++++
+ 5 files changed, 133 insertions(+), 2 deletions(-)
+
+diff --git a/shell/CMakeLists.txt b/shell/CMakeLists.txt
+index b42cd52a..e3a9aab1 100644
+--- a/shell/CMakeLists.txt
++++ b/shell/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-# Copyright 2024 NXP
++# Copyright 2024-2025 NXP
+ # SPDX-License-Identifier: BSD-3-Clause
+ 
+ if (CONFIG_MCUX_COMPONENT_utility.shell)
+@@ -12,4 +12,11 @@ if (CONFIG_MCUX_COMPONENT_utility.shell)
+         INCLUDES .
+     )
+ 
+-endif()
+\ No newline at end of file
++endif()
++
++if (CONFIG_MCUX_COMPONENT_utility.shell.insert_key_enable)
++    mcux_add_configuration(
++        CC "-DSHELL_INSERT_KEY_ENABLE"
++        CX "-DSHELL_INSERT_KEY_ENABLE"
++    )
++endif()
+diff --git a/shell/Kconfig b/shell/Kconfig
+index ebb40c47..23c37a10 100644
+--- a/shell/Kconfig
++++ b/shell/Kconfig
+@@ -17,6 +17,15 @@ config MCUX_COMPONENT_utility.shell.generated_config
+         Generate the config file; otherwise, users will need to provide their own configuration
+         in preinclude.h if they want to change the default values.
+ 
++config MCUX_COMPONENT_utility.shell.insert_key_enable
++    bool "Enable Insert key shell control"
++    default n
++    depends on MCUX_COMPONENT_utility.shell
++    depends on MCUX_PRJSEG_utility.debug_console_run_time_control
++    help
++        Enable Insert key to toggle between shell and debug console.
++        Press Insert key to switch between shell input and debug console output.
++
+ if MCUX_COMPONENT_utility.shell.generated_config
+     menu "shell config"
+         config SHELL_NON_BLOCKING_MODE
+diff --git a/shell/doxygen/shell.dox b/shell/doxygen/shell.dox
+index 45252312..41c6b8ea 100644
+--- a/shell/doxygen/shell.dox
++++ b/shell/doxygen/shell.dox
+@@ -25,6 +25,16 @@ SHELL_Init(s_shellHandle, s_serialHandle, "Test@SHELL>");
+ 
+ ## Advanced Feature {#ShellAdvFeature}
+ 
++### Insert Key Control {#ShellInsertKeyControl}
++
++When SHELL_INSERT_KEY_ENABLE is enabled, the Insert key can be used to toggle between shell CLI input and normal debug console output.
++
++Press the Insert key to switch modes:
++- When debug console is active: Switch to shell mode (disable debug console output, enable shell input)
++- When shell is active: Switch back to debug console mode (enable debug console output, disable shell input)
++
++### Command Support
++
+ + Support to get a character from standard input devices.
+ ~~~~~{.c
+ static shell_status_t SHELL_GetChar(shell_context_handle_t *shellContextHandle, uint8_t *ch);
+diff --git a/shell/fsl_shell.c b/shell/fsl_shell.c
+index 7c69bd18..7487a4d2 100644
+--- a/shell/fsl_shell.c
++++ b/shell/fsl_shell.c
+@@ -136,6 +136,9 @@ typedef enum _fun_key_status
+     kSHELL_Normal   = 0U, /*!< Normal key */
+     kSHELL_Special  = 1U, /*!< Special key */
+     kSHELL_Function = 2U, /*!< Function key */
++#if defined(SHELL_INSERT_KEY_ENABLE)
++    kSHELL_Insert   = 3U, /*!< Insert key */
++#endif
+ } fun_key_status_t;
+ 
+ /*! @brief Data structure for Shell environment. */
+@@ -177,6 +180,10 @@ typedef struct _shell_context_handle
+     uint8_t exit;                                          /*!< Exit Flag*/
+     uint8_t printBusy : 1;                                 /*!< Print is busy */
+     uint8_t taskBusy : 1;                                  /*!< Task is busy */
++#if defined(SHELL_INSERT_KEY_ENABLE)
++    bool enabled;                                    /*!< Shell enabled flag */
++    shell_state_handler_t stateHandler;                    /*!< State change handler */
++#endif
+ } shell_context_handle_t;
+ 
+ #if 0
+@@ -538,13 +545,59 @@ void SHELL_Task(shell_handle_t shellHandle)
+                 }
+                 else if (shellContextHandle->stat == kSHELL_Function)
+                 {
++#if defined(SHELL_INSERT_KEY_ENABLE)
++                    if ((uint8_t)ch == '2')
++                    {
++                        /* Insert Key */
++                        shellContextHandle->stat = kSHELL_Insert;
++
++                        if (!shellContextHandle->enabled) {
++                            shellContextHandle->enabled = true;
++
++                            /* Reset all params */
++                            (void)SHELL_Write(shellContextHandle, "\r\n", 2);
++                            shellContextHandle->c_pos = shellContextHandle->l_pos = 0;
++                            shellContextHandle->hist_current                      = 0;
++                            (void)SHELL_Write(shellContextHandle, shellContextHandle->prompt,
++                                          strlen(shellContextHandle->prompt));
++                             memset(shellContextHandle->line, 0, sizeof(shellContextHandle->line));
++                         } else {
++                             shellContextHandle->enabled = false;
++                         }
++
++                         if (shellContextHandle->stateHandler)
++                         {
++                             shellContextHandle->stateHandler(shellContextHandle, shellContextHandle->enabled);
++                         }
++
++                         continue;
++                    }
++#endif
++
+                     shellContextHandle->stat = kSHELL_Normal;
++
++#if defined(SHELL_INSERT_KEY_ENABLE)
++                    if (!shellContextHandle->enabled)
++                        continue;
++#endif
++
+                     SHELL_hisOperation(ch, shellContextHandle);
+                     continue;
+                 }
++#if defined(SHELL_INSERT_KEY_ENABLE)
++                else if (shellContextHandle->stat == kSHELL_Insert)
++                {
++                    shellContextHandle->stat = kSHELL_Normal;
++                    continue;
++                }
++#endif
+                 /* Handle tab key */
+                 else if ((char)ch == '\t')
+                 {
++#if defined(SHELL_INSERT_KEY_ENABLE)
++                    if (!shellContextHandle->enabled)
++                        continue;
++#endif
+ #if SHELL_AUTO_COMPLETE
+ 
+                     SHELL_MoveCursorToBeginningLine(shellContextHandle);
+@@ -554,6 +607,11 @@ void SHELL_Task(shell_handle_t shellHandle)
+                 /* Handle backspace key */
+                 else if ((ch == KET_DEL) || ((char)ch == '\b'))
+                 {
++#if defined(SHELL_INSERT_KEY_ENABLE)
++                    if (!shellContextHandle->enabled)
++                        continue;
++#endif
++
+                     /* There must be at last one char */
+                     if ((shellContextHandle->c_pos == 0U) || (shellContextHandle->l_pos == 0U))
+                     {
+@@ -567,6 +625,11 @@ void SHELL_Task(shell_handle_t shellHandle)
+                     /* MISRA C-2012 Rule 15.7 */
+                 }
+ 
++#if defined(SHELL_INSERT_KEY_ENABLE)
++                if (!shellContextHandle->enabled)
++                    continue;
++#endif
++
+                 /* Input too long */
+                 SHELL_HandleInputTooLong(shellContextHandle);
+ 
+@@ -1239,3 +1302,15 @@ void SHELL_PrintPrompt(shell_handle_t shellHandle)
+     (void)SHELL_Write(shellContextHandle, "\r\n", 2U);
+     (void)SHELL_Write(shellContextHandle, shellContextHandle->prompt, strlen(shellContextHandle->prompt));
+ }
++
++#if defined(SHELL_INSERT_KEY_ENABLE)
++void SHELL_RegisterStateHandler(shell_handle_t shellHandle, shell_state_handler_t stateHandler)
++{
++    shell_context_handle_t *shellContextHandle;
++    assert(shellHandle);
++
++    shellContextHandle = (shell_context_handle_t *)shellHandle;
++
++    shellContextHandle->stateHandler = stateHandler;
++}
++#endif
+diff --git a/shell/fsl_shell.h b/shell/fsl_shell.h
+index d2aea157..3b102cde 100644
+--- a/shell/fsl_shell.h
++++ b/shell/fsl_shell.h
+@@ -171,6 +171,14 @@ _Pragma("diag_suppress=Pm120")
+     _Pragma("diag_default=Pm120")
+ #endif
+ 
++#if defined(SHELL_INSERT_KEY_ENABLE)
++/*! @brief User insert key handler function prototype.
++ *
++ * @param shell_enabled Indicates whether the shell is enabled (true) or disabled (false).
++ */
++typedef void (*shell_state_handler_t)(shell_handle_t shellHandle, bool enabled);
++#endif
++
+ /*******************************************************************************
+  * API
+  ******************************************************************************/
+@@ -342,6 +350,28 @@ _Pragma("diag_suppress=Pm120")
+ #endif
+     }
+ 
++#if defined(SHELL_INSERT_KEY_ENABLE)
++    /*!
++      * @brief Register a generic state handler callback
++      *
++      * This function is used to register a callback that will be invoked when a shell state change is required
++      * upon an event (e.g. a key is pressed).
++      * The callback allows the application to handle shell enable/disable events, typically used to
++      * toggle between shell mode and debug console mode.
++      *
++      * @param shellHandle The shell module handle pointer.
++      * @param shell_state_handler_t The state handler callback function pointer. The callback receives a opaque pointer
++      *                      parameter indicating the shell context handle, along with a boolean
++      *                      parameter indicating the shell enabled state (true = shell enabled, false = shell disabled).
++      *
++      *
++      * @note This function is only available when SHELL_INSERT_KEY_ENABLE is defined.
++      * @note The callback is called from the shell task context.
++      * @note Pass NULL to unregister the handler.
++      */
++    void SHELL_RegisterStateHandler(shell_handle_t shellHandle, shell_state_handler_t stateHandler);
++#endif
++
+     /* @} */
+ 
+ #if defined(__cplusplus)
+-- 
+2.34.1
+

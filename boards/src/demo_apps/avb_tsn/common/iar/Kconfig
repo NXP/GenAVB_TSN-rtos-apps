@@ -1,0 +1,7 @@
+# Copyright 2025 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+config MCUX_PRJSEG_module.board.iar_stubs
+    bool "Stubs for IAR toolchain support"
+    default n

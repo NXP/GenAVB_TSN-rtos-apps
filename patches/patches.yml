@@ -1,0 +1,43 @@
+patches:
+- path: 0001-definitions_schema.json-extend-build-con.patch
+  sha256sum: 687f5618d17533a078469c07164e1c5ecef491c6f19368b14b4a994e2c7876b1
+  module: mcuxsdk
+  author: Tobias Aguiar
+  email: tobias.aguiarsilvadealmeida@nxp.com
+  date: '2026-04-10'
+  apply-command: git am
+- path: 0002-guigenerator-fix-IAR-guiproject-path-nor.patch
+  sha256sum: 5a6df964f61e32ed5a81b6c078613972d156b109bdfe64664d9fb40d1b2b4354
+  module: mcuxsdk
+  author: Tobias Aguiar
+  email: tobias.aguiarsilvadealmeida@nxp.com
+  date: '2026-04-22'
+  apply-command: git am
+- path: 0001-Runtime-debug-console-output-control.patch
+  sha256sum: 2df55c78f01ee60a6748f1b255159470a0889952a7fbdd459ddf81becc57756e
+  module: mcuxsdk/components
+  author: Rui Sousa
+  email: rui.sousa@nxp.com
+  date: '2020-01-28'
+  apply-command: git am
+- path: 0002-Use-Insert-key-to-enable-shell-and-remov.patch
+  sha256sum: dc7b263b4010886ec959422057a3515b0dbd1f99b7b65d96fb734531334940ce
+  module: mcuxsdk/components
+  author: Rui Sousa
+  email: rui.sousa@nxp.com
+  date: '2020-01-28'
+  apply-command: git am
+- path: 0001-FreeRTOS-Dynamic-heap-size.patch
+  sha256sum: d14ea2d3224e65c796359ddfaeed42a4a4c8c76567141e20f80caaa9b5a34f9a
+  module: mcuxsdk/rtos/freertos/freertos-kernel
+  author: Rui Sousa
+  email: rui.sousa@nxp.com
+  date: '2019-06-27'
+  apply-command: git am
+- path: 0001-Netconf-patch.patch
+  sha256sum: 40f83f077a4c3f2418952b1550f9a38ba96533cf931b65dd9b2fe5fd92929fdd
+  module: mcuxsdk/middleware/lwip
+  author: Bhanu Chander Gaddoju
+  email: bhanu.gaddoju@nxp.com
+  date: '2026-02-04'
+  apply-command: git am

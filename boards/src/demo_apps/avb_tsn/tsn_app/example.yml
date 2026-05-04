@@ -1,0 +1,437 @@
+tsn_app:
+  section-type: application
+  contents:
+    meta_path: ../freertos_avb_apps/boards/src/demo_apps/avb_tsn/tsn_app
+    project-root-path: boards/${board}/demo_apps/avb_tsn/tsn_app/${multicore_foldername}
+    document:
+      name: tsn_app${core_id_suffix_name}
+      category: demo_apps
+      brief: tsn_app
+    toolchains:
+      - -armgcc@debug
+      - -armgcc@flexspi_nor_debug
+      - -armgcc@flexspi_nor_release
+      - -armgcc@sdram_debug
+      - -armgcc@sdram_release
+      - -iar@debug
+      - -iar@release
+      - -iar@flexspi_nor_debug
+      - -iar@flexspi_nor_release
+      - -iar@sdram_debug
+      - -iar@sdram_release
+      - -mdk@debug
+      - -mdk@release
+      - -mdk@flexspi_nor_debug
+      - -mdk@flexspi_nor_release
+      - -mdk@sdram_debug
+      - -mdk@sdram_release
+  boards:
+    evkmimxrt1180@cm33:
+    - +armgcc@release
+    - -armgcc@debug
+    - +armgcc@ram_release
+    - -armgcc@ram_debug
+    - -armgcc@hyperram_release
+    - -armgcc@hyperram_debug
+    - -armgcc@flexspi_nor_debug
+    - -armgcc@flexspi_nor_release
+    - -armgcc@hyperram_txt_debug
+    - -armgcc@hyperram_txt_release
+    evkmimxrt1180@cm7:
+    - +armgcc@release
+    - -armgcc@debug
+    - +armgcc@ram_release
+    - -armgcc@ram_debug
+    - -armgcc@hyperram_release
+    - -armgcc@hyperram_debug
+    - -armgcc@flexspi_nor_debug
+    - -armgcc@flexspi_nor_release
+    evkbmimxrt1170@cm7:
+    - +armgcc@release
+    - -armgcc@debug
+    - +armgcc@ram_release
+    - -armgcc@ram_debug
+    - +armgcc@sdram_release
+    - -armgcc@flexspi_nor_debug
+    - -armgcc@flexspi_nor_release
+    - -armgcc@sdram_debug
+    frdmmcxe31b:
+    - +armgcc@release
+    - -armgcc@debug
+    frdmmcxe247:
+    - +armgcc@release
+    - -armgcc@debug
+    frdmimxrt1186@cm33:
+    - +armgcc@release
+    - -armgcc@debug
+    - +armgcc@ram_release
+    - -armgcc@ram_debug
+    - +armgcc@hyperram_release
+    - -armgcc@hyperram_debug
+    - -armgcc@flexspi_nor_debug
+    - -armgcc@flexspi_nor_release
+    - -armgcc@hyperram_txt_debug
+    - -armgcc@hyperram_txt_release
+    frdmimxrt1186@cm7:
+    - +armgcc@release
+    - -armgcc@debug
+    - +armgcc@ram_release
+    - -armgcc@ram_debug
+    - -armgcc@hyperram_release
+    - -armgcc@hyperram_debug
+    - -armgcc@flexspi_nor_debug
+    - -armgcc@flexspi_nor_release
+
+tsn_app@rt1180_cm33_hyperram_config:
+  section-type: custom_application
+  contents:
+    toolchains:
+      - -armgcc@release
+      - -armgcc@ram_release
+      - -armgcc@hyperram_debug
+      - -armgcc@debug
+      - -armgcc@ram_debug
+      - -armgcc@flexspi_nor_debug
+      - -armgcc@flexspi_nor_release
+      - -armgcc@hyperram_txt_debug
+      - -armgcc@hyperram_txt_release
+      - -iar@debug
+      - -iar@release
+      - -iar@flexspi_nor_debug
+      - -iar@flexspi_nor_release
+      - -iar@hyperram_debug
+      - -iar@hyperram_release
+      - -mdk@debug
+      - -mdk@release
+      - -mdk@flexspi_nor_debug
+      - -mdk@flexspi_nor_release
+      - -mdk@hyperram_debug
+      - -mdk@hyperram_release
+    document:
+      extra_build_args:
+      - -DCONFIG_APP_NETCONF=1
+      - -DCONFIG_MCUX_COMPONENT_component.ele_crypto=y
+      - -DCONFIG_MCUX_COMPONENT_component.psa_crypto_driver.ele_s4xx_rng=y
+      - -DCONFIG_MCUX_COMPONENT_component.psa_crypto_driver.osal=y
+      - -DCONFIG_MCUX_COMPONENT_component.psa_crypto_driver.osal.frtos=y
+      - -DCONFIG_MCUX_COMPONENT_middleware.mbedtls3x=y
+      - -DCONFIG_MCUX_COMPONENT_middleware.mbedtls3x.x509=y
+      - -DCONFIG_MCUX_COMPONENT_middleware.mbedtls3x.crypto=y
+      - -DCONFIG_MCUX_COMPONENT_middleware.mbedtls3x.ssl.no_psa=y
+      - -DCONFIG_MCUX_COMPONENT_middleware.mbedtls3x.crypto.no_psa=y
+      - -DCONFIG_MCUX_COMPONENT_middleware.mbedtls3x.port.config=y
+      - -DCONFIG_MCUX_COMPONENT_middleware.mbedtls3x.port.psa_crypto_config=n
+  boards:
+    evkmimxrt1180@cm33:
+    - +armgcc@hyperram_release
+
+tsn_app@rt1180_cm33_no_enetc0_config:
+  section-type: custom_application
+  contents:
+    toolchains:
+      - -armgcc@release
+      - -armgcc@ram_release
+      - -armgcc@hyperram_release
+      - -armgcc@hyperram_debug
+      - -armgcc@debug
+      - -armgcc@ram_debug
+      - -armgcc@flexspi_nor_debug
+      - -armgcc@flexspi_nor_release
+      - -armgcc@hyperram_txt_debug
+      - -armgcc@hyperram_txt_release
+      - -iar@debug
+      - -iar@release
+      - -iar@flexspi_nor_debug
+      - -iar@flexspi_nor_release
+      - -iar@hyperram_debug
+      - -iar@hyperram_release
+      - -mdk@debug
+      - -mdk@release
+      - -mdk@flexspi_nor_debug
+      - -mdk@flexspi_nor_release
+      - -mdk@hyperram_debug
+      - -mdk@hyperram_release
+    document:
+      extra_build_args:
+      - -DCONFIG_MCUX_PRJSEG_config.board.app_bridge_no_enetc0=y
+  boards:
+    evkmimxrt1180@cm33:
+    - +armgcc@release_no_enetc0
+    - +armgcc@ram_release_no_enetc0
+
+tsn_app@rt1180_cm33_hybrid_config:
+  section-type: custom_application
+  contents:
+    toolchains:
+      - -armgcc@release
+      - -armgcc@ram_release
+      - -armgcc@hyperram_release
+      - -armgcc@hyperram_debug
+      - -armgcc@debug
+      - -armgcc@ram_debug
+      - -armgcc@flexspi_nor_debug
+      - -armgcc@flexspi_nor_release
+      - -armgcc@hyperram_txt_debug
+      - -armgcc@hyperram_txt_release
+      - -iar@debug
+      - -iar@release
+      - -iar@flexspi_nor_debug
+      - -iar@flexspi_nor_release
+      - -iar@hyperram_debug
+      - -iar@hyperram_release
+      - -mdk@debug
+      - -mdk@release
+      - -mdk@flexspi_nor_debug
+      - -mdk@flexspi_nor_release
+      - -mdk@hyperram_debug
+      - -mdk@hyperram_release
+    document:
+      extra_build_args:
+      - -DCONFIG_MCUX_PRJSEG_config.board.app_bridge_hybrid=y
+  boards:
+    evkmimxrt1180@cm33:
+    - +armgcc@release_hybrid
+    - +armgcc@ram_release_hybrid
+
+tsn_app@rt1180_cm7_enetc0_config:
+  section-type: custom_application
+  contents:
+    toolchains:
+      - -armgcc@release
+      - -armgcc@ram_release
+      - -armgcc@hyperram_release
+      - -armgcc@hyperram_debug
+      - -armgcc@debug
+      - -armgcc@ram_debug
+      - -armgcc@flexspi_nor_debug
+      - -armgcc@flexspi_nor_release
+      - -iar@debug
+      - -iar@release
+      - -iar@flexspi_nor_debug
+      - -iar@flexspi_nor_release
+      - -iar@hyperram_debug
+      - -iar@hyperram_release
+      - -mdk@debug
+      - -mdk@release
+      - -mdk@flexspi_nor_debug
+      - -mdk@flexspi_nor_release
+      - -mdk@hyperram_debug
+      - -mdk@hyperram_release
+    document:
+      extra_build_args:
+      - -DCONFIG_MCUX_PRJSEG_config.board.app_enetc0=y
+  boards:
+    evkmimxrt1180@cm7:
+    - +armgcc@release_enetc0
+    - +armgcc@ram_release_enetc0
+
+tsn_app@rt1180_cm7_motor_controller_config:
+  section-type: custom_application
+  contents:
+    toolchains:
+      - -armgcc@release
+      - -armgcc@ram_release
+      - -armgcc@hyperram_release
+      - -armgcc@hyperram_debug
+      - -armgcc@debug
+      - -armgcc@ram_debug
+      - -armgcc@flexspi_nor_debug
+      - -armgcc@flexspi_nor_release
+      - -iar@debug
+      - -iar@release
+      - -iar@flexspi_nor_debug
+      - -iar@flexspi_nor_release
+      - -iar@hyperram_debug
+      - -iar@hyperram_release
+      - -mdk@debug
+      - -mdk@release
+      - -mdk@flexspi_nor_debug
+      - -mdk@flexspi_nor_release
+      - -mdk@hyperram_debug
+      - -mdk@hyperram_release
+    document:
+      extra_build_args:
+      - -DCONFIG_MCUX_PRJSEG_config.board.tsn_motor_controller=y
+  boards:
+    evkmimxrt1180@cm7:
+    - +armgcc@release_motor_controller
+    - +armgcc@ram_release_motor_controller
+
+tsn_app@rt1180_cm7_motor_iodevice_config:
+  section-type: custom_application
+  contents:
+    toolchains:
+      - -armgcc@release
+      - -armgcc@ram_release
+      - -armgcc@hyperram_release
+      - -armgcc@hyperram_debug
+      - -armgcc@debug
+      - -armgcc@ram_debug
+      - -armgcc@flexspi_nor_debug
+      - -armgcc@flexspi_nor_release
+      - -iar@debug
+      - -iar@release
+      - -iar@flexspi_nor_debug
+      - -iar@flexspi_nor_release
+      - -iar@hyperram_debug
+      - -iar@hyperram_release
+      - -mdk@debug
+      - -mdk@release
+      - -mdk@flexspi_nor_debug
+      - -mdk@flexspi_nor_release
+      - -mdk@hyperram_debug
+      - -mdk@hyperram_release
+    document:
+      extra_build_args:
+      - -DCONFIG_MCUX_PRJSEG_config.board.tsn_motor_iodevice=y
+  boards:
+    evkmimxrt1180@cm7:
+    - +armgcc@release_motor_iodevice
+    - +armgcc@ram_release_motor_iodevice
+
+tsn_app@rt1170_cm7_motor_config:
+  section-type: custom_application
+  contents:
+    toolchains:
+      - -armgcc@release
+      - -armgcc@ram_release
+      - -armgcc@sdram_release
+      - -armgcc@debug
+      - -armgcc@ram_debug
+      - -armgcc@flexspi_nor_debug
+      - -armgcc@flexspi_nor_release
+      - -armgcc@sdram_debug
+      - -iar@debug
+      - -iar@release
+      - -iar@flexspi_nor_debug
+      - -iar@flexspi_nor_release
+      - -iar@sdram_debug
+      - -iar@sdram_release
+      - -mdk@debug
+      - -mdk@release
+      - -mdk@flexspi_nor_debug
+      - -mdk@flexspi_nor_release
+      - -mdk@sdram_debug
+      - -mdk@sdram_release
+    document:
+      extra_build_args:
+      - -DCONFIG_MCUX_PRJSEG_config.board.tsn_motor_controller=y
+      - -DCONFIG_MCUX_PRJSEG_config.board.tsn_motor_iodevice=y
+  boards:
+    evkbmimxrt1170@cm7:
+    - +armgcc@release_motor
+    - +armgcc@ram_release_motor
+
+tsn_app@mcxe31b_motor_iodevice_config:
+  section-type: custom_application
+  contents:
+    toolchains:
+      - -armgcc@release
+      - -armgcc@debug
+    document:
+      extra_build_args:
+      - -DCONFIG_MCUX_PRJSEG_config.board.tsn_motor_iodevice=y
+  boards:
+    frdmmcxe31b:
+    - +armgcc@release_motor_iodevice
+
+tsn_app@rt1186_cm33_hybrid_config:
+  section-type: custom_application
+  contents:
+    toolchains:
+      - -armgcc@release
+      - -armgcc@ram_release
+      - -armgcc@hyperram_release
+      - -armgcc@hyperram_debug
+      - -armgcc@debug
+      - -armgcc@ram_debug
+      - -armgcc@flexspi_nor_debug
+      - -armgcc@flexspi_nor_release
+      - -armgcc@hyperram_txt_debug
+      - -armgcc@hyperram_txt_release
+      - -iar@debug
+      - -iar@release
+      - -iar@flexspi_nor_debug
+      - -iar@flexspi_nor_release
+      - -iar@hyperram_debug
+      - -iar@hyperram_release
+      - -mdk@debug
+      - -mdk@release
+      - -mdk@flexspi_nor_debug
+      - -mdk@flexspi_nor_release
+      - -mdk@hyperram_debug
+      - -mdk@hyperram_release
+    document:
+      extra_build_args:
+      - -DCONFIG_MCUX_PRJSEG_config.board.app_bridge_hybrid=y
+  boards:
+    frdmimxrt1186@cm33:
+    - +armgcc@release_hybrid
+    - +armgcc@ram_release_hybrid
+
+tsn_app@rt1186_cm33_hybrid_motor_controller_config:
+  section-type: custom_application
+  contents:
+    toolchains:
+      - -armgcc@release
+      - -armgcc@ram_release
+      - -armgcc@hyperram_release
+      - -armgcc@hyperram_debug
+      - -armgcc@debug
+      - -armgcc@ram_debug
+      - -armgcc@flexspi_nor_debug
+      - -armgcc@flexspi_nor_release
+      - -armgcc@hyperram_txt_debug
+      - -armgcc@hyperram_txt_release
+      - -iar@debug
+      - -iar@release
+      - -iar@flexspi_nor_debug
+      - -iar@flexspi_nor_release
+      - -iar@hyperram_debug
+      - -iar@hyperram_release
+      - -mdk@debug
+      - -mdk@release
+      - -mdk@flexspi_nor_debug
+      - -mdk@flexspi_nor_release
+      - -mdk@hyperram_debug
+      - -mdk@hyperram_release
+    document:
+      extra_build_args:
+      - -DCONFIG_MCUX_PRJSEG_config.board.app_bridge_hybrid=y
+      - -DCONFIG_MCUX_PRJSEG_config.board.tsn_motor_controller=y
+  boards:
+    frdmimxrt1186@cm33:
+    - +armgcc@release_hybrid_motor_controller
+    - +armgcc@ram_release_hybrid_motor_controller
+
+tsn_app@rt1186_cm7_motor_controller_config:
+  section-type: custom_application
+  contents:
+    toolchains:
+      - -armgcc@release
+      - -armgcc@ram_release
+      - -armgcc@hyperram_release
+      - -armgcc@hyperram_debug
+      - -armgcc@debug
+      - -armgcc@ram_debug
+      - -armgcc@flexspi_nor_debug
+      - -armgcc@flexspi_nor_release
+      - -iar@debug
+      - -iar@release
+      - -iar@flexspi_nor_debug
+      - -iar@flexspi_nor_release
+      - -iar@hyperram_debug
+      - -iar@hyperram_release
+      - -mdk@debug
+      - -mdk@release
+      - -mdk@flexspi_nor_debug
+      - -mdk@flexspi_nor_release
+      - -mdk@hyperram_debug
+      - -mdk@hyperram_release
+    document:
+      extra_build_args:
+      - -DCONFIG_MCUX_PRJSEG_config.board.tsn_motor_controller=y
+  boards:
+    frdmimxrt1186@cm7:
+    - +armgcc@release_motor_controller
+    - +armgcc@ram_release_motor_controller

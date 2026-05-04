@@ -1,0 +1,177 @@
+From 969fd2da95157b54da80d3f18781c539d2430837 Mon Sep 17 00:00:00 2001
+From: Tobias Aguiar <tobias.aguiarsilvadealmeida@nxp.com>
+Date: Wed, 22 Apr 2026 05:23:47 +0200
+Subject: [PATCH] guigenerator: fix IAR guiproject path
+ normalization
+
+Fix path normalization for GUI-generated IAR projects so
+$PROJ_DIR$-relative
+paths are consistent and do not produce wrong-rooted or overly deep
+relative paths for external applications.
+
+Harden linker script handling by consuming repeated linker-script
+options
+from the input flags and emitting a single project-relative linker
+script
+setting in the generated project, preventing invalid ILINK command line
+combinations during IDE builds.
+
+Signed-off-by: Tobias Aguiar <tobias.aguiarsilvadealmeida@nxp.com>
+---
+ .../project_generator/core/_project_mixin.rb  | 28 ++++++++
+ .../project_generator/ninja_parser.rb         | 67 ++++++++++++-------
+ 2 files changed, 72 insertions(+), 23 deletions(-)
+
+diff --git a/scripts/guigenerator/project_generator/core/_project_mixin.rb b/scripts/guigenerator/project_generator/core/_project_mixin.rb
+index 631a8532..a282688c 100644
+--- a/scripts/guigenerator/project_generator/core/_project_mixin.rb
++++ b/scripts/guigenerator/project_generator/core/_project_mixin.rb
+@@ -21,6 +21,34 @@ module Mixin
+     end
+ 
+     def path_mod(path, rootdir)
++      # If the incoming path already contains an IDE path macro (like $PROJ_DIR$),
++      # treat it as already-project-relative and do not re-normalize it.
++      # This prevents accidental re-rooting under SdkRootDirPath and avoids creating
++      # duplicated prefixes like $PROJ_DIR$/../<app-root>/...
++      path_slash = path.tr('\\', '/')
++      if path_slash.start_with?('$PROJ_DIR$/')
++        return path_slash.sub(/^\$PROJ_DIR\$\//, '')
++      end
++      if path_slash == '$PROJ_DIR$'
++        return '.'
++      end
++
++      # If the incoming path is already explicitly relative (./ or ../) or absolute,
++      # do not re-root it under SdkRootDirPath. Treat it as relative to the generated
++      # project directory (the directory that becomes $PROJ_DIR$ for IAR/MDK), and
++      # normalize it.
++      if path_slash.start_with?('./', '../') || path_slash.start_with?('/') || path_slash.match?(/\A[A-Za-z]:\//)
++        project_dir = @modifier.fullpath(@output_dir)
++        file_fullpath = if path_slash.start_with?('/') || path_slash.match?(/\A[A-Za-z]:\//)
++                          path_slash
++                        else
++                          File.expand_path(File.join(project_dir, path_slash)).tr('\\', '/')
++                        end
++        rel = File.relpath(project_dir, file_fullpath)
++        rel = '.' if rel == ''
++        return rel
++      end
++
+       if ENV['standalone'] == 'true'
+         if ENV['TEMP_BUILD_DIR']
+           tmp_dir = File.basename(ENV['TEMP_BUILD_DIR'])
+diff --git a/scripts/guigenerator/project_generator/ninja_parser.rb b/scripts/guigenerator/project_generator/ninja_parser.rb
+index 97f06a9b..443fd929 100644
+--- a/scripts/guigenerator/project_generator/ninja_parser.rb
++++ b/scripts/guigenerator/project_generator/ninja_parser.rb
+@@ -299,21 +299,18 @@ class NinjaParser
+                 end
+               else
+                 begin
+-                  if ENV['standalone'] == 'true'
+-                    # if include path is same as output dir for standalone project,
+-                    # means it's in project root path, use './'
+-                    if Pathname.new(_flag[1]).cleanpath == Pathname.new(@outdir).cleanpath
+-                      include_path = './'
+-                    else
+-                      # Use path relative to output dir for standalone project if the file is out of the repo
+-                      include_path = Pathname.new(_flag[1]).relative_path_from(Pathname.new(File.join(@outdir, @toolchain))).to_s
+-                    end
+-                  else
+-                    # Use relative path for GUI project
++                  # If the include path is outside the MCUX SDK repo, keep it relative to the generated project
++                  # directory (build/<toolchain>). This covers external projects without requiring callers to
++                  # specify a generator mode.
++                  if Utils.path_inside?(_flag[1], REPO_ROOT_PATH)
+                     include_path = Pathname.new(_flag[1]).relative_path_from(Pathname.new(REPO_ROOT_PATH)).cleanpath.to_s
++                  else
++                    include_path = Pathname.new(_flag[1]).relative_path_from(Pathname.new(File.join(@outdir, @toolchain))).to_s
+                   end
+-                rescue StandardError => e
+-                  raise "Get relative path error: Can't get relative path from #{REPO_ROOT_PATH} to #{_flag[1]}, please make sure the destination path is in the same disk for Windows"
++                rescue StandardError
++                  # On Windows, relative_path_from can fail if paths are on different drives.
++                  # Fall back to repo-relative (original behavior) rather than hard-failing generation.
++                  include_path = Pathname.new(_flag[1]).relative_path_from(Pathname.new(REPO_ROOT_PATH)).cleanpath.to_s
+                 end
+               end
+ 
+@@ -428,7 +425,14 @@ class NinjaParser
+       # Special handling for ${APPLICATION_BINARY_DIR}/.. paths
+       file_path = Pathname.new(file_full_path).relative_path_from(Pathname.new(File.join(@outdir, @toolchain))).to_s
+     else
+-      file_path = get_relative_path(REPO_ROOT_PATH, file_path)
++      # File is outside the MCUX SDK repo and not a generated object path; treat it as an external source.
++      # Normalize it relative to the generated project directory (build/<toolchain>) to keep paths stable.
++      begin
++        file_path = Pathname.new(file_full_path).relative_path_from(Pathname.new(File.join(@outdir, @toolchain))).to_s
++      rescue StandardError
++        # Fallback (e.g., different drive letters on Windows)
++        file_path = get_relative_path(REPO_ROOT_PATH, file_path)
++      end
+     end
+     # some toolchain like mdk may remove file extension in ninja file, need to add it back for gui project
+     file_path = complete_path(file_path, line, attribute) if @toolchain == 'mdk'
+@@ -509,13 +513,23 @@ class NinjaParser
+     else
+       pattern = nil
+     end
++    # Some projects may emit duplicated linker-script options in LINK_FLAGS (e.g. repeated "--config <icf>").
++    # For GUI projects, the configuration script is represented separately in the IDE project settings
++    # (IlinkIcfFile). Therefore we must remove *all* occurrences of the script option from ld-flags,
++    # otherwise the remaining bare path token can be mis-parsed into IlinkConfigDefines and generate
++    # an invalid "--config_def <icf>" (missing '=') on the IAR link line.
++    first_script = nil
+     if pattern
+-      result = all_flags.match(pattern)
+-    else
+-      result = nil
++      while (result = all_flags.match(pattern))
++        first_script ||= result[1]
++        all_flags.sub!(result[0], '')
++      end
+     end
+-    if result
+-      path = get_relative_path(REPO_ROOT_PATH, result[1].tr('\\', '/'))
++
++    if first_script
++      # Keep the linker script path relative to the project directory (=$PROJ_DIR$ base)
++      # to avoid wrong-rooted forms like $PROJ_DIR$/../<app-root>/... in the generated .ewp.
++      path = translate_project_relative_path(first_script.tr('\\', '/'))
+       tmp = { 'source' => path,
+               'attribute' => 'linker-file',
+               'toolchains' => @toolchain,
+@@ -525,9 +539,8 @@ class NinjaParser
+               'repo_path' => File.dirname(path),
+               'package_path' => File.dirname(path)
+             }
+-      tmp['generated'] = true unless File.exist?(result[1])
++      tmp['generated'] = true unless File.exist?(first_script)
+       @data[@name]['contents']['modules']['demo']['files'].push(tmp)
+-      all_flags.sub!(result[ 0 ], '')
+     end
+     all_flags
+   end
+@@ -646,8 +659,16 @@ class NinjaParser
+         path = relative_path
+       end
+     else
+-      # For gui project, project file is in <build_dir>/toolchain folder, need extra '..' in path
+-      path = File.join('..', relative_path)
++      # For GUI project, $PROJ_DIR$ is the directory containing the generated .ew* files, which is
++      # <build_dir>/<toolchain> (e.g. build/iar). Use that as the base directly instead of adding an
++      # extra ".." on top of a path already relative to <build_dir>.
++      project_dir = File.join(@outdir, @toolchain)
++      begin
++        path = Pathname.new(abs_path).relative_path_from(Pathname.new(project_dir)).to_s
++      rescue StandardError
++        # Fallback to the legacy behavior if relative path calculation fails (e.g. different drives).
++        path = File.join('..', relative_path)
++      end
+     end
+     Pathname.new(File.join('.', path)).cleanpath.to_s
+   end
+-- 
+2.34.1
+
