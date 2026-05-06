@@ -1,7 +1,7 @@
 audio_app:
   section-type: application
   contents:
-    meta_path: ../freertos_avb_apps/boards/src/demo_apps/avb_tsn/audio_app
+    meta_path: ../GenAVB_TSN-rtos-apps/boards/src/demo_apps/avb_tsn/audio_app
     project-root-path: boards/${board}/demo_apps/avb_tsn/audio_app/${multicore_foldername}
     document:
       name: audio_app${core_id_suffix_name}

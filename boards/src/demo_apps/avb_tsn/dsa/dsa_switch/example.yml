@@ -1,7 +1,7 @@
 dsa_switch:
   section-type: application
   contents:
-    meta_path: ../freertos_avb_apps/boards/src/demo_apps/avb_tsn/dsa/dsa_switch
+    meta_path: ../GenAVB_TSN-rtos-apps/boards/src/demo_apps/avb_tsn/dsa/dsa_switch
     project-root-path: boards/${board}/demo_apps/avb_tsn/dsa_switch/${multicore_foldername}
     document:
       name: dsa_switch${core_id_suffix_name}

@@ -4,7 +4,7 @@ if [ "${BASH_SOURCE[0]}" = "${0}" ]; then
     echo "Error: This script must be sourced, not executed directly."
     echo "Usage: source bootstrap.sh"
     echo "   or: . bootstrap.sh"
-    exit 1
+    return 1
 fi
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -18,7 +18,7 @@ echo "Bootstrapping MCUX SDK development environment..."
 cd "$WORKSPACE_DIR"
 if [ $? -ne 0 ]; then
     echo "Error: Could not change to workspace directory"
-    exit 1
+    return 1
 fi
 
 SKIP_WEST=0
@@ -34,7 +34,7 @@ if [ "$SKIP_WEST" = "0" ]; then
         source "$SCRIPT_DIR/internal.sh"
         if [ $? -ne 0 ]; then
             echo "Error: Internal setup failed"
-            exit 1
+            return 1
         fi
     fi
     # END_INTERNAL
@@ -42,7 +42,7 @@ if [ "$SKIP_WEST" = "0" ]; then
     west update
     if [ $? -ne 0 ]; then
         echo "Error: Failed to update west workspace"
-        exit 1
+        return 1
     fi
 
     if [ -d "$REPO_DIR/patches" ]; then
@@ -51,7 +51,7 @@ if [ "$SKIP_WEST" = "0" ]; then
         west patch -b "$REPO_DIR/patches" -l "$REPO_DIR/patches/patches.yml" apply
         if [ $? -ne 0 ]; then
             echo "Error: west patch failed"
-            exit 1
+            return 1
         fi
     fi
 

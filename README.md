@@ -260,14 +260,13 @@ For the MCX E31B one example application is provided: TSN Endpoint. The applicat
 
 When opening a new terminal session, use the MCUXpresso tools integrated terminal so the virtual environment is automatically set up, and ensure `ARMGCC_DIR` points to the Arm GNU toolchain installation.
 
-**Linux:**
-```bash
-cd <workspace>/GenAVB_TSN-rtos-apps
-export ARMGCC_DIR="$HOME/.mcuxpressotools/arm-gnu-toolchain-14.2.rel1-x86_64-arm-none-eabi"
-```
+### Flashing Image Booting
 
-**Windows:**
-```cmd
-cd <workspace>\GenAVB_TSN-rtos-apps
-set ARMGCC_DIR=%MCUXPRESSOTOOLS%\arm-gnu-toolchain-14.2.rel1-mingw-w64-x86_64-arm-none-eabi
+Note: on MIMXRT1180-EVK board for both Jlink or LinkServer flashing methods, make sure the jumper JP5 is removed.
+
+Run the `west flash` command from the application directory. The generic command format is:
+
+```bash
+cd <workspace>/GenAVB_TSN-rtos-apps/
+west flash --runner=linkserver   (or --runner=jlink)
 ```

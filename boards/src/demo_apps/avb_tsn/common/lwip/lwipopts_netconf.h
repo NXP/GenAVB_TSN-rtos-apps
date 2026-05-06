@@ -1,6 +1,6 @@
 /*
  * Copyright 2013-2016 Freescale Semiconductor, Inc.
- * Copyright 2016, 2018-2020, 2023, 2025 NXP
+ * Copyright 2016, 2018-2020, 2023, 2025-2026 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */

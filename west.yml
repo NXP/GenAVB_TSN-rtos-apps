@@ -41,17 +41,17 @@ manifest:
           - mcuxsdk-tool-data
     - name: GenAVB_TSN
       path: mcuxsdk/middleware/gen_avb
-      revision: "8_0_0"
+      revision: 366f33c1506a27f2b1956ac24221e67097006be2
     - name: rtos-abstraction-layer
       path: mcuxsdk/components/rtos-abstraction-layer
-      revision: "1_7_0"
+      revision: bede9f04902953adab96c9a7d5121eca3e5dbcc8
     - name: rtos-apps
       path: mcuxsdk/components/rtos-apps
-      revision: "1_3_0"
+      revision: a10b6515aea3610ac8d22b4414235b560d884b3e
     - name: heterogeneous-multicore
       remote: nxp-realtimeedge
       path: mcuxsdk/middleware/heterogeneous-multicore
-      revision: genavbtsn_8_0_internal
+      revision: 20fff5054c15be15a6f7e4053312e483f27223bf
 
   self:
     import:

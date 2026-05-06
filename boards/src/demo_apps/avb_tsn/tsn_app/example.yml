@@ -1,7 +1,7 @@
 tsn_app:
   section-type: application
   contents:
-    meta_path: ../freertos_avb_apps/boards/src/demo_apps/avb_tsn/tsn_app
+    meta_path: ../GenAVB_TSN-rtos-apps/boards/src/demo_apps/avb_tsn/tsn_app
     project-root-path: boards/${board}/demo_apps/avb_tsn/tsn_app/${multicore_foldername}
     document:
       name: tsn_app${core_id_suffix_name}

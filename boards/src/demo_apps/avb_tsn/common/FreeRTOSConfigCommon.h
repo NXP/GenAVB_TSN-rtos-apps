@@ -1,7 +1,7 @@
 /*
  * FreeRTOS Kernel V10.2.0
  * Copyright (C) 2019 Amazon.com, Inc. or its affiliates.  All Rights Reserved.
- * Copyright 2018-2023, 2025 NXP
+ * Copyright 2018-2023, 2025-2026 NXP
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
