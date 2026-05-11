@@ -262,11 +262,11 @@ When opening a new terminal session, use the MCUXpresso tools integrated termina
 
 ### Flashing Image Booting
 
-Note: on MIMXRT1180-EVK board for both Jlink or LinkServer flashing methods, make sure the jumper JP5 is removed.
+Note: on MIMXRT1170-EVKB and MIMXRT1180-EVK boards for both Jlink or LinkServer flashing methods, make sure the jumper JP5 is removed.
 
 Run the `west flash` command from the application directory. The generic command format is:
 
 ```bash
 cd <workspace>/GenAVB_TSN-rtos-apps/
-west flash --runner=linkserver   (or --runner=jlink)
+west flash --runner <linkserver | jlink>  [-d <path to build directory>]
 ```
