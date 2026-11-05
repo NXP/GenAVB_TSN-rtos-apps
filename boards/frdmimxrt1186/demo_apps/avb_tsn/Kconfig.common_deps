@@ -1,0 +1,12 @@
+config MCUX_PRJSEG_module.board.frdmimxrt1186
+    bool
+    default y
+    select MCUX_COMPONENT_component.phyrtl8201
+    select MCUX_COMPONENT_component.phyyt8521
+    select MCUX_COMPONENT_driver.msgintr
+    select MCUX_COMPONENT_driver.netc
+    select MCUX_COMPONENT_driver.netc_switch
+    select MCUX_COMPONENT_driver.rgpio
+    select MCUX_COMPONENT_driver.trdc
+    select MCUX_COMPONENT_driver.flexspi
+    select MCUX_COMPONENT_component.rtos_apps.async

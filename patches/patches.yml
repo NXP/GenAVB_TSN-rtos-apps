@@ -1,0 +1,22 @@
+patches:
+- path: 0001-guigenerator-fix-IAR-guiproject-path-nor.patch
+  sha256sum: c7744e73143af0dfc12fe285683f8d9bfc4502a0e3668170514cd0680b925f28
+  module: mcuxsdk
+  author: Tobias Aguiar
+  email: tobias.aguiarsilvadealmeida@nxp.com
+  date: '2026-04-22'
+  apply-command: git am
+- path: 0001-Runtime-debug-console-output-control.patch
+  sha256sum: d344f56a40d9dab1cc243fa3d0b34b9e167d5354ddcae8842fc92ff64e4ee058
+  module: mcuxsdk/components
+  author: Rui Sousa
+  email: rui.sousa@nxp.com
+  date: '2020-01-28'
+  apply-command: git am
+- path: 0002-Use-Insert-key-to-enable-shell-and-remov.patch
+  sha256sum: 2c4fb10eaa2083696d3ba6068dc0be39ac10057139e844d5afc1f3dad9195c5a
+  module: mcuxsdk/components
+  author: Rui Sousa
+  email: rui.sousa@nxp.com
+  date: '2020-01-28'
+  apply-command: git am

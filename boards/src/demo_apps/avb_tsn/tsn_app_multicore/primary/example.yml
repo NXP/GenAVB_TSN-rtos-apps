@@ -1,0 +1,45 @@
+tsn_app_multicore_primary:
+  use_sysbuild: true
+  section-type: application
+  contents:
+    meta_path: ../GenAVB_TSN-rtos-apps/boards/src/demo_apps/avb_tsn/tsn_app_multicore/primary
+    project-root-path: boards/${board}/demo_apps/avb_tsn/tsn_app/${multicore_foldername}
+    document:
+      name: tsn_app_multicore_primary${core_id_suffix_name}
+      category: demo_apps
+      brief: tsn_app multicore primary
+    toolchains:
+      - -armgcc@debug
+      - -armgcc@flexspi_nor_debug
+      - -armgcc@flexspi_nor_release
+      - -armgcc@sdram_debug
+      - -armgcc@sdram_release
+      - -iar@debug
+      - -iar@release
+      - -iar@flexspi_nor_debug
+      - -iar@flexspi_nor_release
+      - -iar@sdram_debug
+      - -iar@sdram_release
+      - -mdk@debug
+      - -mdk@release
+      - -mdk@flexspi_nor_debug
+      - -mdk@flexspi_nor_release
+      - -mdk@sdram_debug
+      - -mdk@sdram_release
+  boards:
+    evkmimxrt1180@cm33:
+    - +armgcc@release
+    - -armgcc@hyperram_release
+    - -armgcc@hyperram_debug
+    - -iar@hyperram_release
+    - -iar@hyperram_debug
+    - -mdk@hyperram_release
+    - -mdk@hyperram_debug
+    frdmimxrt1186@cm33:
+    - +armgcc@release
+    - -armgcc@hyperram_release
+    - -armgcc@hyperram_debug
+    - -iar@hyperram_release
+    - -iar@hyperram_debug
+    - -mdk@hyperram_release
+    - -mdk@hyperram_debug

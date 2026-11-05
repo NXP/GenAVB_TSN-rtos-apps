@@ -1,0 +1,135 @@
+<?xml version="1.0"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="3523" height="1903" xml:space="preserve" overflow="hidden">
+  <defs>
+    <linearGradient x1="1037.5" y1="677" x2="1037.5" y2="884" gradientUnits="userSpaceOnUse" spreadMethod="reflect" id="fill0">
+      <stop offset="0" stop-color="#9CD8F9"/>
+      <stop offset="0.5" stop-color="#8ECFF3"/>
+      <stop offset="1" stop-color="#79CCF7"/>
+    </linearGradient>
+    <linearGradient x1="2409.5" y1="675" x2="2409.5" y2="883" gradientUnits="userSpaceOnUse" spreadMethod="reflect" id="fill1">
+      <stop offset="0" stop-color="#9CD8F9"/>
+      <stop offset="0.5" stop-color="#8ECFF3"/>
+      <stop offset="1" stop-color="#79CCF7"/>
+    </linearGradient>
+    <linearGradient x1="1937" y1="1061" x2="1937" y2="1269" gradientUnits="userSpaceOnUse" spreadMethod="reflect" id="fill2">
+      <stop offset="0" stop-color="#9CD8F9"/>
+      <stop offset="0.5" stop-color="#8ECFF3"/>
+      <stop offset="1" stop-color="#79CCF7"/>
+    </linearGradient>
+    <linearGradient x1="2167.5" y1="292" x2="2167.5" y2="500" gradientUnits="userSpaceOnUse" spreadMethod="reflect" id="fill3">
+      <stop offset="0" stop-color="#B2ED9B"/>
+      <stop offset="0.5" stop-color="#A7E38E"/>
+      <stop offset="1" stop-color="#99E479"/>
+    </linearGradient>
+    <linearGradient x1="1669.5" y1="1417" x2="1669.5" y2="1580" gradientUnits="userSpaceOnUse" spreadMethod="reflect" id="fill4">
+      <stop offset="0" stop-color="#457AE8"/>
+      <stop offset="0.5" stop-color="#0067EA"/>
+      <stop offset="1" stop-color="#005ADA"/>
+    </linearGradient>
+    <linearGradient x1="773.5" y1="1417" x2="773.5" y2="1988" gradientUnits="userSpaceOnUse" spreadMethod="reflect" id="fill5">
+      <stop offset="0" stop-color="#457AE8"/>
+      <stop offset="0.5" stop-color="#0067EA"/>
+      <stop offset="1" stop-color="#005ADA"/>
+    </linearGradient>
+    <linearGradient x1="3610" y1="1417" x2="3610" y2="2193" gradientUnits="userSpaceOnUse" spreadMethod="reflect" id="fill6">
+      <stop offset="0" stop-color="#457AE8"/>
+      <stop offset="0.5" stop-color="#0067EA"/>
+      <stop offset="1" stop-color="#005ADA"/>
+    </linearGradient>
+    <linearGradient x1="3038.5" y1="1417" x2="3038.5" y2="1757" gradientUnits="userSpaceOnUse" spreadMethod="reflect" id="fill7">
+      <stop offset="0" stop-color="#457AE8"/>
+      <stop offset="0.5" stop-color="#0067EA"/>
+      <stop offset="1" stop-color="#005ADA"/>
+    </linearGradient>
+    <linearGradient x1="2490" y1="1417" x2="2490" y2="1579" gradientUnits="userSpaceOnUse" spreadMethod="reflect" id="fill8">
+      <stop offset="0" stop-color="#457AE8"/>
+      <stop offset="0.5" stop-color="#0067EA"/>
+      <stop offset="1" stop-color="#005ADA"/>
+    </linearGradient>
+  </defs>
+  <rect x="0" y="0" width="3523" height="1903" fill="#ffffff"/>
+  <g transform="translate(-406 -291)">
+    <rect x="407" y="677" width="1261" height="207" stroke="#0EAFE0" stroke-width="2.29167" stroke-miterlimit="8" fill="url(#fill0)"/>
+    <text font-family="Poppins SemiBold,Poppins SemiBold_MSFontService,sans-serif" font-weight="600" font-size="83" transform="matrix(1 0 0 1 676.553 807)">GenAVB/TSN SDK</text>
+    <rect x="1723" y="675" width="1373" height="208" stroke="#0EAFE0" stroke-width="2.29167" stroke-miterlimit="8" fill="url(#fill1)"/>
+    <text font-family="Poppins SemiBold,Poppins SemiBold_MSFontService,sans-serif" font-weight="600" font-size="83" transform="matrix(1 0 0 1 1925.68 806)">RTOS Application Layer</text>
+    <rect x="1139" y="1061" width="1596" height="208" stroke="#0EAFE0" stroke-width="2.29167" stroke-miterlimit="8" fill="url(#fill2)"/>
+    <text font-family="Poppins SemiBold,Poppins SemiBold_MSFontService,sans-serif" font-weight="600" font-size="83" transform="matrix(1 0 0 1 1449.21 1191)">RTOS Abstraction Layer</text>
+    <rect x="407" y="292" width="3521" height="208" stroke="#69CA00" stroke-width="2.29167" stroke-miterlimit="8" fill="url(#fill3)"/>
+    <text font-family="Poppins SemiBold,Poppins SemiBold_MSFontService,sans-serif" font-weight="600" font-size="83" transform="matrix(1 0 0 1 1623.81 423)">GenAVB/TSN Applications</text>
+    <rect x="1139" y="1417" width="1061" height="163" stroke="#0068DF" stroke-width="2.29167" stroke-miterlimit="8" fill="url(#fill4)"/>
+    <text fill="#FFFFFF" font-family="Poppins SemiBold,Poppins SemiBold_MSFontService,sans-serif" font-weight="600" font-size="50" transform="matrix(1 0 0 1 1171.82 1485)">Rtos</text>
+    <text fill="#FFFFFF" font-family="Poppins SemiBold,Poppins SemiBold_MSFontService,sans-serif" font-weight="600" font-size="50" transform="matrix(1 0 0 1 1282.97 1485)">:</text>
+    <text fill="#FFFFFF" font-family="Arial,Arial_MSFontService,sans-serif" font-weight="400" font-size="50" transform="matrix(1 0 0 1 1171.82 1534)">&#x2022;</text>
+    <text fill="#FFFFFF" font-family="Poppins SemiBold,Poppins SemiBold_MSFontService,sans-serif" font-weight="600" font-size="50" transform="matrix(1 0 0 1 1274.95 1534)">FreeRTOS Kernel</text>
+    <rect x="454" y="1417" width="639" height="571" stroke="#0068DF" stroke-width="2.29167" stroke-miterlimit="8" fill="url(#fill5)"/>
+    <text fill="#FFFFFF" font-family="Poppins SemiBold,Poppins SemiBold_MSFontService,sans-serif" font-weight="600" font-size="46" transform="matrix(1 0 0 1 487.498 1473)">Drivers:</text>
+    <text fill="#FFFFFF" font-family="Arial,Arial_MSFontService,sans-serif" font-weight="400" font-size="46" transform="matrix(1 0 0 1 487.498 1517)">&#x2022;</text>
+    <text fill="#FFFFFF" font-family="Poppins SemiBold,Poppins SemiBold_MSFontService,sans-serif" font-weight="600" font-size="46" transform="matrix(1 0 0 1 590.623 1517)">netc</text>
+    <text fill="#FFFFFF" font-family="Arial,Arial_MSFontService,sans-serif" font-weight="400" font-size="46" transform="matrix(1 0 0 1 487.498 1561)">&#x2022;</text>
+    <text fill="#FFFFFF" font-family="Poppins SemiBold,Poppins SemiBold_MSFontService,sans-serif" font-weight="600" font-size="46" transform="matrix(1 0 0 1 590.623 1561)">enet_qos</text>
+    <text fill="#FFFFFF" font-family="Arial,Arial_MSFontService,sans-serif" font-weight="400" font-size="46" transform="matrix(1 0 0 1 487.498 1605)">&#x2022;</text>
+    <text fill="#FFFFFF" font-family="Poppins SemiBold,Poppins SemiBold_MSFontService,sans-serif" font-weight="600" font-size="46" transform="matrix(1 0 0 1 590.623 1605)">enet</text>
+    <text fill="#FFFFFF" font-family="Arial,Arial_MSFontService,sans-serif" font-weight="400" font-size="46" transform="matrix(1 0 0 1 487.498 1649)">&#x2022;</text>
+    <text fill="#FFFFFF" font-family="Poppins SemiBold,Poppins SemiBold_MSFontService,sans-serif" font-weight="600" font-size="46" transform="matrix(1 0 0 1 590.623 1649)">gpt</text>
+    <text fill="#FFFFFF" font-family="Arial,Arial_MSFontService,sans-serif" font-weight="400" font-size="46" transform="matrix(1 0 0 1 487.498 1693)">&#x2022;</text>
+    <text fill="#FFFFFF" font-family="Poppins SemiBold,Poppins SemiBold_MSFontService,sans-serif" font-weight="600" font-size="46" transform="matrix(1 0 0 1 590.623 1693)">stm</text>
+    <text fill="#FFFFFF" font-family="Arial,Arial_MSFontService,sans-serif" font-weight="400" font-size="46" transform="matrix(1 0 0 1 487.498 1737)">&#x2022;</text>
+    <text fill="#FFFFFF" font-family="Poppins SemiBold,Poppins SemiBold_MSFontService,sans-serif" font-weight="600" font-size="46" transform="matrix(1 0 0 1 590.623 1737)">ftm</text>
+    <text fill="#FFFFFF" font-family="Arial,Arial_MSFontService,sans-serif" font-weight="400" font-size="46" transform="matrix(1 0 0 1 487.498 1781)">&#x2022;</text>
+    <text fill="#FFFFFF" font-family="Poppins SemiBold,Poppins SemiBold_MSFontService,sans-serif" font-weight="600" font-size="46" transform="matrix(1 0 0 1 590.623 1781)">msgintr</text>
+    <text fill="#FFFFFF" font-family="Arial,Arial_MSFontService,sans-serif" font-weight="400" font-size="46" transform="matrix(1 0 0 1 487.498 1825)">&#x2022;</text>
+    <text fill="#FFFFFF" font-family="Poppins SemiBold,Poppins SemiBold_MSFontService,sans-serif" font-weight="600" font-size="46" transform="matrix(1 0 0 1 590.623 1825)">cache</text>
+    <text fill="#FFFFFF" font-family="Poppins SemiBold,Poppins SemiBold_MSFontService,sans-serif" font-weight="600" font-size="46" transform="matrix(1 0 0 1 487.498 1869)">Components:</text>
+    <text fill="#FFFFFF" font-family="Arial,Arial_MSFontService,sans-serif" font-weight="400" font-size="46" transform="matrix(1 0 0 1 487.498 1913)">&#x2022;</text>
+    <text fill="#FFFFFF" font-family="Poppins SemiBold,Poppins SemiBold_MSFontService,sans-serif" font-weight="600" font-size="46" transform="matrix(1 0 0 1 590.623 1913)">phy</text>
+    <rect x="3342" y="1417" width="536" height="776" stroke="#0068DF" stroke-width="2.29167" stroke-miterlimit="8" fill="url(#fill6)"/>
+    <text fill="#FFFFFF" font-family="Poppins SemiBold,Poppins SemiBold_MSFontService,sans-serif" font-weight="600" font-size="46" transform="matrix(1 0 0 1 3375.49 1473)">Drivers:</text>
+    <text fill="#FFFFFF" font-family="Arial,Arial_MSFontService,sans-serif" font-weight="400" font-size="46" transform="matrix(1 0 0 1 3375.49 1517)">&#x2022;</text>
+    <text fill="#FFFFFF" font-family="Poppins SemiBold,Poppins SemiBold_MSFontService,sans-serif" font-weight="600" font-size="46" transform="matrix(1 0 0 1 3478.62 1517)">clock</text>
+    <text fill="#FFFFFF" font-family="Arial,Arial_MSFontService,sans-serif" font-weight="400" font-size="46" transform="matrix(1 0 0 1 3375.49 1561)">&#x2022;</text>
+    <text fill="#FFFFFF" font-family="Poppins SemiBold,Poppins SemiBold_MSFontService,sans-serif" font-weight="600" font-size="46" transform="matrix(1 0 0 1 3478.62 1561)">ele</text>
+    <text fill="#FFFFFF" font-family="Arial,Arial_MSFontService,sans-serif" font-weight="400" font-size="46" transform="matrix(1 0 0 1 3375.49 1605)">&#x2022;</text>
+    <text fill="#FFFFFF" font-family="Poppins SemiBold,Poppins SemiBold_MSFontService,sans-serif" font-weight="600" font-size="46" transform="matrix(1 0 0 1 3478.62 1605)">lpuart</text>
+    <text fill="#FFFFFF" font-family="Arial,Arial_MSFontService,sans-serif" font-weight="400" font-size="46" transform="matrix(1 0 0 1 3375.49 1649)">&#x2022;</text>
+    <text fill="#FFFFFF" font-family="Poppins SemiBold,Poppins SemiBold_MSFontService,sans-serif" font-weight="600" font-size="46" transform="matrix(1 0 0 1 3478.62 1649)">pins</text>
+    <text fill="#FFFFFF" font-family="Poppins SemiBold,Poppins SemiBold_MSFontService,sans-serif" font-weight="600" font-size="46" transform="matrix(1 0 0 1 3375.49 1693)">Utilities:</text>
+    <text fill="#FFFFFF" font-family="Arial,Arial_MSFontService,sans-serif" font-weight="400" font-size="46" transform="matrix(1 0 0 1 3375.49 1737)">&#x2022;</text>
+    <text fill="#FFFFFF" font-family="Poppins SemiBold,Poppins SemiBold_MSFontService,sans-serif" font-weight="600" font-size="46" transform="matrix(1 0 0 1 3478.62 1737)">shell</text>
+    <text fill="#FFFFFF" font-family="Poppins SemiBold,Poppins SemiBold_MSFontService,sans-serif" font-weight="600" font-size="46" transform="matrix(1 0 0 1 3375.49 1781)">Components:</text>
+    <text fill="#FFFFFF" font-family="Arial,Arial_MSFontService,sans-serif" font-weight="400" font-size="46" transform="matrix(1 0 0 1 3375.49 1825)">&#x2022;</text>
+    <text fill="#FFFFFF" font-family="Poppins SemiBold,Poppins SemiBold_MSFontService,sans-serif" font-weight="600" font-size="46" transform="matrix(1 0 0 1 3478.62 1825)">codec</text>
+    <text fill="#FFFFFF" font-family="Arial,Arial_MSFontService,sans-serif" font-weight="400" font-size="46" transform="matrix(1 0 0 1 3375.49 1869)">&#x2022;</text>
+    <text fill="#FFFFFF" font-family="Poppins SemiBold,Poppins SemiBold_MSFontService,sans-serif" font-weight="600" font-size="46" transform="matrix(1 0 0 1 3478.62 1869)">serial manager</text>
+    <text fill="#FFFFFF" font-family="Poppins SemiBold,Poppins SemiBold_MSFontService,sans-serif" font-weight="600" font-size="46" transform="matrix(1 0 0 1 3375.49 1913)">Middleware:</text>
+    <text fill="#FFFFFF" font-family="Arial,Arial_MSFontService,sans-serif" font-weight="400" font-size="46" transform="matrix(1 0 0 1 3375.49 1957)">&#x2022;</text>
+    <text fill="#FFFFFF" font-family="Poppins SemiBold,Poppins SemiBold_MSFontService,sans-serif" font-weight="600" font-size="46" transform="matrix(1 0 0 1 3478.62 1957)">littleFs</text>
+    <text fill="#FFFFFF" font-family="Arial,Arial_MSFontService,sans-serif" font-weight="400" font-size="46" transform="matrix(1 0 0 1 3375.49 2001)">&#x2022;</text>
+    <text fill="#FFFFFF" font-family="Poppins SemiBold,Poppins SemiBold_MSFontService,sans-serif" font-weight="600" font-size="46" transform="matrix(1 0 0 1 3478.62 2001)">lwIP</text>
+    <text fill="#FFFFFF" font-family="Arial,Arial_MSFontService,sans-serif" font-weight="400" font-size="46" transform="matrix(1 0 0 1 3375.49 2045)">&#x2022;</text>
+    <text fill="#FFFFFF" font-family="Poppins SemiBold,Poppins SemiBold_MSFontService,sans-serif" font-weight="600" font-size="46" transform="matrix(1 0 0 1 3478.62 2045)">motor control</text>
+    <text fill="#FFFFFF" font-family="Arial,Arial_MSFontService,sans-serif" font-weight="400" font-size="46" transform="matrix(1 0 0 1 3375.49 2089)">&#x2022;</text>
+    <text fill="#FFFFFF" font-family="Poppins SemiBold,Poppins SemiBold_MSFontService,sans-serif" font-weight="600" font-size="46" transform="matrix(1 0 0 1 3478.62 2089)">rtcsel</text>
+    <path d="M3588 535 3623 500 3658 535 3640.5 535 3640.5 1382 3658 1382 3623 1417 3588 1382 3605.5 1382 3605.5 535Z" fill="#F9B500" fill-rule="evenodd"/>
+    <path d="M744 922.5 778.5 888 813 922.5 795.75 922.5 795.75 1382.5 813 1382.5 778.5 1417 744 1382.5 761.25 1382.5 761.25 922.5Z" fill="#F9B500" fill-rule="evenodd"/>
+    <path d="M1635 1303.5 1669.5 1269 1704 1303.5 1686.75 1303.5 1686.75 1382.5 1704 1382.5 1669.5 1417 1635 1382.5 1652.25 1382.5 1652.25 1303.5Z" fill="#F9B500" fill-rule="evenodd"/>
+    <path d="M2296 923 2331 888 2366 923 2348.5 923 2348.5 1026 2366 1026 2331 1061 2296 1026 2313.5 1026 2313.5 923Z" fill="#F9B500" fill-rule="evenodd"/>
+    <path d="M2375 534.5 2409.5 500 2444 534.5 2426.75 534.5 2426.75 640.5 2444 640.5 2409.5 675 2375 640.5 2392.25 640.5 2392.25 534.5Z" fill="#F9B500" fill-rule="evenodd"/>
+    <path d="M1038 538 1072 504 1106 538 1089 538 1089 645 1106 645 1072 679 1038 645 1055 645 1055 538Z" fill="#F9B500" fill-rule="evenodd"/>
+    <path d="M1508 917.5 1542.5 883 1577 917.5 1559.75 917.5 1559.75 1033.5 1577 1033.5 1542.5 1068 1508 1033.5 1525.25 1033.5 1525.25 917.5Z" fill="#F9B500" fill-rule="evenodd"/>
+    <path d="M0 35 35.0001 0 70.0001 35 52.5004 35 52.5004 494 70.0001 494 35.0001 529 0 494 17.5003 494 17.5003 35Z" fill="#F9B500" fill-rule="evenodd" transform="matrix(-1 0 0 1 3071 888)"/>
+    <rect x="2787" y="1417" width="503" height="340" stroke="#0068DF" stroke-width="2.29167" stroke-miterlimit="8" fill="url(#fill7)"/>
+    <text fill="#FFFFFF" font-family="Poppins SemiBold,Poppins SemiBold_MSFontService,sans-serif" font-weight="600" font-size="55" transform="matrix(1 0 0 1 2820.33 1491)">Drivers:</text>
+    <text fill="#FFFFFF" font-family="Arial,Arial_MSFontService,sans-serif" font-weight="400" font-size="55" transform="matrix(1 0 0 1 2820.33 1557)">&#x2022;</text>
+    <text fill="#FFFFFF" font-family="Poppins SemiBold,Poppins SemiBold_MSFontService,sans-serif" font-weight="600" font-size="55" transform="matrix(1 0 0 1 2923.46 1557)">clock</text>
+    <text fill="#FFFFFF" font-family="Arial,Arial_MSFontService,sans-serif" font-weight="400" font-size="55" transform="matrix(1 0 0 1 2820.33 1623)">&#x2022;</text>
+    <text fill="#FFFFFF" font-family="Poppins SemiBold,Poppins SemiBold_MSFontService,sans-serif" font-weight="600" font-size="55" transform="matrix(1 0 0 1 2923.46 1623)">lpuart</text>
+    <text fill="#FFFFFF" font-family="Arial,Arial_MSFontService,sans-serif" font-weight="400" font-size="55" transform="matrix(1 0 0 1 2820.33 1689)">&#x2022;</text>
+    <text fill="#FFFFFF" font-family="Poppins SemiBold,Poppins SemiBold_MSFontService,sans-serif" font-weight="600" font-size="55" transform="matrix(1 0 0 1 2923.46 1689)">sai</text>
+    <rect x="2245" y="1417" width="490" height="162" stroke="#0068DF" stroke-width="2.29167" stroke-miterlimit="8" fill="url(#fill8)"/>
+    <text fill="#FFFFFF" font-family="Poppins SemiBold,Poppins SemiBold_MSFontService,sans-serif" font-weight="600" font-size="41" transform="matrix(1 0 0 1 2278.45 1478)">Utilities:</text>
+    <text fill="#FFFFFF" font-family="Arial,Arial_MSFontService,sans-serif" font-weight="400" font-size="41" transform="matrix(1 0 0 1 2278.45 1527)">&#x2022;</text>
+    <text fill="#FFFFFF" font-family="Poppins SemiBold,Poppins SemiBold_MSFontService,sans-serif" font-weight="600" font-size="41" transform="matrix(1 0 0 1 2381.57 1527)">debug console</text>
+    <path d="M2460 1303.5 2494.5 1269 2529 1303.5 2511.75 1303.5 2511.75 1383.5 2529 1383.5 2494.5 1418 2460 1383.5 2477.25 1383.5 2477.25 1303.5Z" fill="#F9B500" fill-rule="evenodd"/>
+  </g>
+</svg>

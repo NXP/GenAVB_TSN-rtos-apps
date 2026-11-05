@@ -1,0 +1,11 @@
+# Copyright 2025 NXP
+#
+# SPDX License Identifier: BSD-3-Clause
+
+rsource "../Kconfig.common_deps"
+
+config MCUX_PRJSEG_config.board.tsn
+    bool "MCXE247 FRDM endpoint configuration"
+    default y
+    select APP_LWIP
+    select MCUX_COMPONENT_component.rtos_apps.tsn_headers

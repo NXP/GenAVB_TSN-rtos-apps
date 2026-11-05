@@ -1,0 +1,25 @@
+# Copyright 2025-2026 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+menu "GenAVB/TSN DSA Switch Application Configuration"
+config MCUX_PRJSEG_config.board.dsa
+    bool
+    default y
+    select APP_QBV
+    select APP_FP
+    select APP_STORAGE
+    select APP_TSN_BRIDGE
+    select MCUX_COMPONENT_driver.lpspi
+    select MCUX_PRJSEG_module.hmc.virtual_sw_lib
+    select MCUX_COMPONENT_component.rtos_apps.tsn_headers
+    select MCUX_COMPONENT_middleware.genavb.dsa if MCUX_COMPONENT_middleware.genavb
+
+rsource "../../common/Kconfig"
+rsource "../../common/Kconfig.prjseg"
+
+source "${SdkRootDirPath}/middleware/heterogeneous-multicore/net/boards/evkmimxrt1180/cm33/mcux/Kconfig"
+source "$(app_root_path)/boards/${board}/demo_apps/avb_tsn/dsa_switch/Kconfig"
+endmenu
+
+source "${SdkRootDirPath}/Kconfig.mcuxpresso"

@@ -1,0 +1,75 @@
+# Copyright 2025-2026 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+menu "GenAVB/TSN application common configuration"
+
+config MCUX_PRJSEG_config.board.src_common_files
+    bool
+    default y
+
+config MCUX_PRJSEG_config.board.app_storage
+    bool
+    default y if APP_STORAGE
+    select MCUX_COMPONENT_middleware.littlefs
+    # MCXE3X keeps the file system in on-chip flash (no external QSPI), so pull
+    # in the SDK mflash on-chip component that the MCXE lfs backend builds on.
+    select MCUX_COMPONENT_component.mflash_onchip if (MCUX_HW_DEVICE_ID_MCXE31B || MCUX_HW_DEVICE_ID_MCXE32B)
+
+config MCUX_PRJSEG_config.board.app_tsn_bridge
+    bool
+    default y if APP_TSN_BRIDGE
+    select MCUX_COMPONENT_component.rtos_apps.shell.tsn_bridge
+
+config APP_LWIP
+    bool "lwIP stack support"
+    default n
+    select MCUX_COMPONENT_middleware.lwip
+    select MCUX_COMPONENT_middleware.lwip.apps.lwiperf
+    select MCUX_COMPONENT_middleware.lwip.empty_ethernetif
+
+config APP_STORAGE
+    bool "Storage support"
+    default n
+    select MCUX_COMPONENT_component.rtos_apps.storage_common
+
+config APP_QBV
+    bool "Scheduled Traffic support"
+    default n
+    select MCUX_COMPONENT_component.rtos_apps.shell.qbv
+
+config APP_FP
+    bool "Frame Preemption support"
+    default n
+    select MCUX_COMPONENT_component.rtos_apps.shell.fp
+
+config APP_PPS
+    bool "PPS output support"
+    default y
+    depends on ((MCUX_HW_DEVICE_ID_MIMXRT1176xxxxx && MCUX_HW_CORE_CM7F) && !APP_MOTOR_IO_DEVICE)
+
+config APP_TSN_BRIDGE
+    bool "TSN Bridge support"
+    default n
+
+config APP_MOTOR_CONTROLLER
+    bool "Motor Controller support"
+    default n
+    depends on ((MCUX_HW_DEVICE_ID_MIMXRT1189xxxxx && MCUX_HW_CORE_CM7F) || (MCUX_HW_DEVICE_ID_MIMXRT1176xxxxx && MCUX_HW_CORE_CM7F) || (MCUX_HW_DEVICE_ID_MCXE31B) || (MCUX_HW_DEVICE_ID_MCXE32B && MCUX_HW_CORE_ID_CORE0))
+
+config APP_MOTOR_IO_DEVICE
+    bool "Motor IO-device support"
+    default n
+    depends on ((MCUX_HW_DEVICE_ID_MIMXRT1189xxxxx && MCUX_HW_CORE_CM7F) || (MCUX_HW_DEVICE_ID_MIMXRT1176xxxxx && MCUX_HW_CORE_CM7F) || (MCUX_HW_DEVICE_ID_MCXE31B) || (MCUX_HW_DEVICE_ID_MCXE32B && MCUX_HW_CORE_ID_CORE0))
+
+config APP_MOTOR_ENCODER_ABS_POSITION
+    bool "Motor Absolute Position Encoder support"
+    default y
+    depends on APP_MOTOR_IO_DEVICE
+endmenu
+
+rsource "./iar/Kconfig"
+source "${SdkRootDirPath}/components/rtos-apps/Kconfig.mcux"
+source "${SdkRootDirPath}/components/rtos-abstraction-layer/freertos/Kconfig"
+source "${SdkRootDirPath}/middleware/gen_avb/Kconfig"
+

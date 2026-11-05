@@ -1,0 +1,13 @@
+# Copyright 2025 NXP
+#
+# SPDX License Identifier: BSD-3-Clause
+
+config MCUX_PRJSEG_module.board.frdmmcxe247
+    bool
+    default y
+    select MCUX_COMPONENT_component.phylan8741
+    select MCUX_COMPONENT_component.rtos_apps.async
+    select MCUX_COMPONENT_driver.cache_lmem
+    select MCUX_COMPONENT_driver.enet
+    select MCUX_COMPONENT_driver.qspi
+    select MCUX_COMPONENT_driver.smc

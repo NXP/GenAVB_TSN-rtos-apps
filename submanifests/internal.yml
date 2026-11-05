@@ -1,0 +1,16 @@
+manifest:
+  remotes:
+  - name: nxp-zephyr
+    url-base: https://github.com/nxp-zephyr
+  - name: nxp-mcuxpresso
+    url-base: https://github.com/nxp-mcuxpresso
+  defaults:
+    remote: nxp-mcuxpresso
+  projects:
+    - name: bifrost
+      path: bifrost
+      remote: nxp-zephyr
+      revision: dev_gen_avb
+      west-commands: scripts/west_commands.yml
+      groups:
+        - bifrost

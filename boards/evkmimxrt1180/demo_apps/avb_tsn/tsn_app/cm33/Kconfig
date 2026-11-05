@@ -1,0 +1,46 @@
+# Copyright 2025-2026 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+choice MCUX_PRJSEG_config.board.build_cfg_sel
+    prompt "MIMXRT1180 EVK CM33 TSN build configuration options"
+    default MCUX_PRJSEG_config.board.app_bridge_default
+
+    config MCUX_PRJSEG_config.board.app_bridge_default
+        bool "TSN bridge default configuration"
+        select APP_TSN_BRIDGE
+        select APP_STORAGE
+        imply APP_QBV
+        imply APP_FP
+        imply APP_LWIP
+        select MCUX_COMPONENT_driver.cache_xcache
+        select MCUX_COMPONENT_middleware.freertos-kernel.cm33_non_trustzone
+        imply MCUX_COMPONENT_middleware.genavb.srp
+        imply MCUX_COMPONENT_middleware.genavb.hsr
+        select MCUX_COMPONENT_component.rtos_apps.tsn_headers
+
+    config MCUX_PRJSEG_config.board.app_bridge_no_enetc0
+        bool "TSN bridge disable ENETC0 configuration"
+        select APP_TSN_BRIDGE
+        select APP_STORAGE
+        imply APP_QBV
+        imply APP_FP
+        imply APP_LWIP
+        select MCUX_COMPONENT_driver.cache_xcache
+        select MCUX_COMPONENT_middleware.freertos-kernel.cm33_non_trustzone
+        imply MCUX_COMPONENT_middleware.genavb.srp
+        imply MCUX_COMPONENT_middleware.genavb.hsr
+        select MCUX_COMPONENT_component.rtos_apps.tsn_headers
+
+    config MCUX_PRJSEG_config.board.app_bridge_hybrid
+        bool "TSN bridge hybrid configuration"
+        select APP_TSN_ENDPOINT
+        select APP_TSN_BRIDGE
+        select APP_STORAGE
+        imply APP_QBV
+        imply APP_FP
+        imply APP_LWIP
+        select MCUX_COMPONENT_driver.cache_xcache
+        select MCUX_COMPONENT_middleware.freertos-kernel.cm33_non_trustzone
+
+endchoice
